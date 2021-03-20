@@ -76,7 +76,6 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun MyApp(data: List<Models.CityItem>) {
     Surface(color = MaterialTheme.colors.background) {
-        val offsetX = remember { mutableStateOf(0f) }
         val listState = rememberLazyListState()
         val selection = remember { mutableStateOf(0) }
         val coroutineScope = rememberCoroutineScope()
@@ -90,7 +89,6 @@ fun MyApp(data: List<Models.CityItem>) {
             Cities(data = data, state = listState, selection = selection)
             Spacer(modifier = Modifier.fillMaxSize(0.2f))
             Sprocket(
-                offsetX = offsetX,
                 listState = listState,
                 coroutineScope = coroutineScope,
                 selection = selection
@@ -101,7 +99,6 @@ fun MyApp(data: List<Models.CityItem>) {
 
 @Composable
 private fun Sprocket(
-    offsetX: MutableState<Float>,
     listState: LazyListState,
     coroutineScope: CoroutineScope,
     selection: MutableState<Int>
