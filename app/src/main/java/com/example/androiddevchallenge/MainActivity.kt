@@ -170,7 +170,7 @@ private fun City(data: Models.CityItem) {
                 .padding(top = 8.dp)
                 .fillMaxWidth(),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.h1
+            style = MaterialTheme.typography.h2
         )
     }
 }
