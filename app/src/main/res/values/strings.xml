@@ -9,5 +9,8 @@
       or implied. See the License for the specific language governing permissions and limitations under
       the License.
       -->
-    <string name="app_name">AndroidDevChallenge</string>
+    <string name="app_name">Sprocket Weather</string>
+    <string name="cd_city_img">Forecast for %1$s</string>
+    <string name="cd_sprocket">Drag right to rotate</string>
+    <string name="txt_sprocket_instructions">Drag to rotate the Sprocket to select a city!</string>
 </resources>
