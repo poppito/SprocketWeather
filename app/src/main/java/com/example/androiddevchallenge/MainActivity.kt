@@ -105,15 +105,36 @@ private fun Sprocket(
     selection: MutableState<Int>
 ) {
     val rotation = remember { mutableStateOf(0f) }
-    Column(
+    Row(
         modifier = Modifier
             .padding(16.dp)
             .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.btn_left),
+            contentDescription = stringResource(
+                id = R.string.cd_btn_left
+            ),
+            modifier = Modifier
+                .clickable {
+                    if (selection.value > 0) {
+                        selection.value = selection.value - 1
+                        rotation.value = rotation.value - ROTATION_ANGLE
+                    }
+                    coroutineScope.launch {
+                        listState.scrollToItem(
+                            index = selection.value
+                        )
+                    }
+                }
+                .padding(8.dp)
+        )
         Card(
             modifier = Modifier
                 .rotate(rotation.value)
+                .padding(16.dp)
                 .clickable(
                     onClick = {
                         // TODO
@@ -126,55 +147,24 @@ private fun Sprocket(
                 contentDescription = stringResource(id = R.string.cd_sprocket)
             )
         }
-
-        Row {
-            Image(
-                painter = painterResource(id = R.drawable.btn_left),
-                contentDescription = stringResource(
-                    id = R.string.cd_btn_left
-                ),
-                modifier = Modifier
-                    .clickable {
-                        if (selection.value > 0) {
-                            selection.value = selection.value - 1
-                            rotation.value = rotation.value - ROTATION_ANGLE
-                        }
-                        coroutineScope.launch {
-                            listState.animateScrollToItem(
-                                index = selection.value
-                            )
-                        }
-                    }
-                    .padding(8.dp)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.btn_right),
-                contentDescription = stringResource(
-                    id = R.string.cd_btn_right
-                ),
-                modifier = Modifier
-                    .clickable {
-                        if (selection.value < cityItems.size - 1) {
-                            selection.value = selection.value + 1
-                            rotation.value = rotation.value + ROTATION_ANGLE
-                        }
-                        coroutineScope.launch {
-                            listState.animateScrollToItem(
-                                index = selection.value
-                            )
-                        }
-                    }
-                    .padding(8.dp)
-            )
-        }
-
-        Text(
-            text = stringResource(id = R.string.txt_sprocket_instructions),
+        Image(
+            painter = painterResource(id = R.drawable.btn_right),
+            contentDescription = stringResource(
+                id = R.string.cd_btn_right
+            ),
             modifier = Modifier
-                .padding(top = 8.dp)
-                .fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.caption
+                .clickable {
+                    if (selection.value < cityItems.size - 1) {
+                        selection.value = selection.value + 1
+                        rotation.value = rotation.value + ROTATION_ANGLE
+                    }
+                    coroutineScope.launch {
+                        listState.animateScrollToItem(
+                            index = selection.value
+                        )
+                    }
+                }
+                .padding(8.dp)
         )
     }
 }
@@ -206,7 +196,7 @@ private fun City(data: Models.CityItem, selected: Boolean = false) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.5f)
+            .fillMaxHeight(0.4f)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -229,7 +219,7 @@ private fun City(data: Models.CityItem, selected: Boolean = false) {
                         contentScale = ContentScale.Fit,
                         modifier = Modifier
                             .fillMaxWidth(0.8f)
-                            .height(150.dp)
+                            .height(100.dp)
                             .zIndex(1f)
                     )
                     Text(
@@ -253,33 +243,41 @@ private fun City(data: Models.CityItem, selected: Boolean = false) {
                 }
             }
         } else {
-            Image(
-                painter = painterResource(id = data.img),
-                contentDescription = stringResource(id = R.string.cd_city_img, data.name),
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .height(150.dp)
-                    .zIndex(1f)
-            )
-            Text(
-                text = data.name.capitalCase(),
-                modifier = Modifier
-                    .padding(top = 8.dp)
-                    .fillMaxWidth()
-                    .zIndex(1f),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.h1
-            )
-            Text(
-                text = data.country.capitalCase(),
-                modifier = Modifier
-                    .padding(top = 8.dp)
-                    .fillMaxWidth()
-                    .zIndex(1f),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.h2
-            )
+            Column(
+                Modifier
+                    .padding(16.dp)
+                    .fillMaxSize()
+                    .fillMaxHeight(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = painterResource(id = data.img),
+                    contentDescription = stringResource(id = R.string.cd_city_img, data.name),
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .height(150.dp)
+                        .zIndex(1f)
+                )
+                Text(
+                    text = data.name.capitalCase(),
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .fillMaxWidth()
+                        .zIndex(1f),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.h1
+                )
+                Text(
+                    text = data.country.capitalCase(),
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .fillMaxWidth()
+                        .zIndex(1f),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.h2
+                )
+            }
         }
     }
 }
