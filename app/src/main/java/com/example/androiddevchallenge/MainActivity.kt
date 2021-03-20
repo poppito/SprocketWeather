@@ -20,18 +20,18 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -41,6 +41,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -51,11 +52,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
+import com.example.androiddevchallenge.Constants.Companion.ROTATION_ANGLE
 import com.example.androiddevchallenge.model.Models
 import com.example.androiddevchallenge.model.cityItems
 import com.example.androiddevchallenge.ui.theme.MyTheme
 import extensions.capitalCase
-import kotlin.math.abs
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,21 +77,36 @@ class MainActivity : AppCompatActivity() {
 fun MyApp(data: List<Models.CityItem>) {
     Surface(color = MaterialTheme.colors.background) {
         val offsetX = remember { mutableStateOf(0f) }
+        val listState = rememberLazyListState()
+        val selection = remember { mutableStateOf(0) }
+        val coroutineScope = rememberCoroutineScope()
+        val animating = remember { mutableStateOf(false) }
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Cities(data = data)
+            Cities(data = data, state = listState, selection = selection)
             Spacer(modifier = Modifier.fillMaxSize(0.2f))
-            Sprocket(offsetX = offsetX)
+            Sprocket(
+                offsetX = offsetX,
+                listState = listState,
+                coroutineScope = coroutineScope,
+                selection = selection
+            )
         }
     }
 }
 
 @Composable
-private fun Sprocket(offsetX: MutableState<Float>) {
+private fun Sprocket(
+    offsetX: MutableState<Float>,
+    listState: LazyListState,
+    coroutineScope: CoroutineScope,
+    selection: MutableState<Int>
+) {
+    val rotation = remember { mutableStateOf(0f) }
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -96,12 +115,10 @@ private fun Sprocket(offsetX: MutableState<Float>) {
     ) {
         Card(
             modifier = Modifier
-                .rotate(offsetX.value)
-                .clickable(onClick = { })
-                .draggable(
-                    orientation = Orientation.Horizontal,
-                    state = rememberDraggableState { delta ->
-                        offsetX.value += abs(delta.toFloat()) / 5
+                .rotate(rotation.value)
+                .clickable(
+                    onClick = {
+                        // TODO
                     }
                 ),
             shape = CircleShape
@@ -111,6 +128,48 @@ private fun Sprocket(offsetX: MutableState<Float>) {
                 contentDescription = stringResource(id = R.string.cd_sprocket)
             )
         }
+
+        Row {
+            Image(
+                painter = painterResource(id = R.drawable.btn_left),
+                contentDescription = stringResource(
+                    id = R.string.cd_btn_left
+                ),
+                modifier = Modifier
+                    .clickable {
+                        rotation.value = rotation.value - ROTATION_ANGLE
+                        if (selection.value >= 0) {
+                            selection.value = selection.value - 1
+                        }
+                        coroutineScope.launch {
+                            listState.animateScrollToItem(
+                                index = selection.value
+                            )
+                        }
+                    }
+                    .padding(8.dp)
+            )
+            Image(
+                painter = painterResource(id = R.drawable.btn_right),
+                contentDescription = stringResource(
+                    id = R.string.cd_btn_right
+                ),
+                modifier = Modifier
+                    .clickable {
+                        rotation.value = rotation.value + ROTATION_ANGLE
+                        if (selection.value < cityItems.size - 1) {
+                            selection.value = selection.value + 1
+                        }
+                        coroutineScope.launch {
+                            listState.animateScrollToItem(
+                                index = selection.value
+                            )
+                        }
+                    }
+                    .padding(8.dp)
+            )
+        }
+
         Text(
             text = stringResource(id = R.string.txt_sprocket_instructions),
             modifier = Modifier
@@ -123,23 +182,28 @@ private fun Sprocket(offsetX: MutableState<Float>) {
 }
 
 @Composable
-private fun Cities(data: List<Models.CityItem>) {
+private fun Cities(
+    data: List<Models.CityItem>,
+    state: LazyListState,
+    selection: MutableState<Int>
+) {
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 16.dp, bottom = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.Center,
+        state = state
     ) {
         // items
         items(data.size) { index ->
-            City(data = data[index])
+            City(data = data[index], selected = selection.value == index)
         }
     }
 }
 
 @Composable
-private fun City(data: Models.CityItem) {
+private fun City(data: Models.CityItem, selected: Boolean = false) {
     val context = LocalContext.current
     Column(
         modifier = Modifier
@@ -155,12 +219,14 @@ private fun City(data: Models.CityItem) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(150.dp)
+                .zIndex(1f)
         )
         Text(
             text = data.name.capitalCase(),
             modifier = Modifier
                 .padding(top = 8.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .zIndex(1f),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.h1
         )
@@ -168,7 +234,8 @@ private fun City(data: Models.CityItem) {
             text = data.country.capitalCase(),
             modifier = Modifier
                 .padding(top = 8.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .zIndex(1f),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.h2
         )

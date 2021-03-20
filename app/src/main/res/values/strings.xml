@@ -13,4 +13,7 @@
     <string name="cd_city_img">Forecast for %1$s</string>
     <string name="cd_sprocket">Drag right to rotate</string>
     <string name="txt_sprocket_instructions">Drag to rotate the Sprocket to select a city!</string>
+    <string name="txt_selected">Selected</string>
+    <string name="cd_btn_left">Left</string>
+    <string name="cd_btn_right">Right</string>
 </resources>
