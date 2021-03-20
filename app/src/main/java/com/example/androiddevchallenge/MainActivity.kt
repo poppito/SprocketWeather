@@ -79,7 +79,6 @@ fun MyApp(data: List<Models.CityItem>) {
         val listState = rememberLazyListState()
         val selection = remember { mutableStateOf(0) }
         val coroutineScope = rememberCoroutineScope()
-        val animating = remember { mutableStateOf(false) }
         Column(
             modifier = Modifier
                 .fillMaxSize()
