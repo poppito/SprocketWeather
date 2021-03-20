@@ -19,8 +19,10 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -133,9 +135,9 @@ private fun Sprocket(
                 ),
                 modifier = Modifier
                     .clickable {
-                        rotation.value = rotation.value - ROTATION_ANGLE
-                        if (selection.value >= 0) {
+                        if (selection.value > 0) {
                             selection.value = selection.value - 1
+                            rotation.value = rotation.value - ROTATION_ANGLE
                         }
                         coroutineScope.launch {
                             listState.animateScrollToItem(
@@ -152,9 +154,9 @@ private fun Sprocket(
                 ),
                 modifier = Modifier
                     .clickable {
-                        rotation.value = rotation.value + ROTATION_ANGLE
                         if (selection.value < cityItems.size - 1) {
                             selection.value = selection.value + 1
+                            rotation.value = rotation.value + ROTATION_ANGLE
                         }
                         coroutineScope.launch {
                             listState.animateScrollToItem(
@@ -204,37 +206,81 @@ private fun City(data: Models.CityItem, selected: Boolean = false) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.4f)
+            .fillMaxHeight(0.5f)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(id = data.img),
-            contentDescription = stringResource(id = R.string.cd_city_img, data.name),
-            contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .zIndex(1f)
-        )
-        Text(
-            text = data.name.capitalCase(),
-            modifier = Modifier
-                .padding(top = 8.dp)
-                .fillMaxWidth()
-                .zIndex(1f),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.h1
-        )
-        Text(
-            text = data.country.capitalCase(),
-            modifier = Modifier
-                .padding(top = 8.dp)
-                .fillMaxWidth()
-                .zIndex(1f),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.h2
-        )
+        if (selected) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = MaterialTheme.colors.primaryVariant)
+            ) {
+                Column(
+                    Modifier
+                        .padding(16.dp)
+                        .fillMaxSize()
+                        .fillMaxHeight(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(id = data.img),
+                        contentDescription = stringResource(id = R.string.cd_city_img, data.name),
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .height(150.dp)
+                            .zIndex(1f)
+                    )
+                    Text(
+                        text = data.name.capitalCase(),
+                        modifier = Modifier
+                            .padding(top = 8.dp)
+                            .fillMaxWidth()
+                            .zIndex(1f),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.h1
+                    )
+                    Text(
+                        text = data.country.capitalCase(),
+                        modifier = Modifier
+                            .padding(top = 8.dp)
+                            .fillMaxWidth()
+                            .zIndex(1f),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.h2
+                    )
+                }
+            }
+        } else {
+            Image(
+                painter = painterResource(id = data.img),
+                contentDescription = stringResource(id = R.string.cd_city_img, data.name),
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .height(150.dp)
+                    .zIndex(1f)
+            )
+            Text(
+                text = data.name.capitalCase(),
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .fillMaxWidth()
+                    .zIndex(1f),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.h1
+            )
+            Text(
+                text = data.country.capitalCase(),
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .fillMaxWidth()
+                    .zIndex(1f),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.h2
+            )
+        }
     }
 }
 
