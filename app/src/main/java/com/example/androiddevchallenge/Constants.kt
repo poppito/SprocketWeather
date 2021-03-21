@@ -18,5 +18,6 @@ package com.example.androiddevchallenge
 class Constants {
     companion object {
         const val ROTATION_ANGLE = 20f
+        const val CITY_NAME = "cityName"
     }
 }

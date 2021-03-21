@@ -15,6 +15,7 @@
  */
 package com.example.androiddevchallenge
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -53,6 +54,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.example.androiddevchallenge.Constants.Companion.CITY_NAME
 import com.example.androiddevchallenge.Constants.Companion.ROTATION_ANGLE
 import com.example.androiddevchallenge.model.Models
 import com.example.androiddevchallenge.model.cityItems
@@ -61,20 +63,19 @@ import extensions.capitalCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class CitiesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MyTheme {
-                MyApp(data = cityItems)
+                AddLayoutElements(data = cityItems)
             }
         }
     }
 }
 
-// Start building your app here!
 @Composable
-fun MyApp(data: List<Models.CityItem>) {
+fun AddLayoutElements(data: List<Models.CityItem>) {
     Surface(color = MaterialTheme.colors.background) {
         val listState = rememberLazyListState()
         val selection = remember { mutableStateOf(0) }
@@ -102,6 +103,7 @@ private fun Sprocket(
     coroutineScope: CoroutineScope,
     selection: MutableState<Int>
 ) {
+    val context = LocalContext.current
     val rotation = remember { mutableStateOf(0f) }
     Row(
         modifier = Modifier
@@ -137,7 +139,9 @@ private fun Sprocket(
                 .padding(16.dp)
                 .clickable(
                     onClick = {
-                        // TODO
+                        val intent = Intent(context, CityWeatherActivity::class.java)
+                        intent.putExtra(CITY_NAME, cityItems[selection.value].name)
+                        context.startActivity(intent)
                     }
                 )
         )
@@ -281,7 +285,7 @@ private fun City(data: Models.CityItem, selected: Boolean = false) {
 @Composable
 fun LightPreview() {
     MyTheme {
-        MyApp(data = cityItems)
+        AddLayoutElements(data = cityItems)
     }
 }
 
@@ -289,6 +293,6 @@ fun LightPreview() {
 @Composable
 fun DarkPreview() {
     MyTheme(darkTheme = true) {
-        MyApp(data = cityItems)
+        AddLayoutElements(data = cityItems)
     }
 }

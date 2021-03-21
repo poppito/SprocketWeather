@@ -15,4 +15,5 @@
     <string name="txt_selected">Selected</string>
     <string name="cd_btn_left">Left</string>
     <string name="cd_btn_right">Right</string>
+    <string name="txt_degrees">%1$d°C</string>
 </resources>

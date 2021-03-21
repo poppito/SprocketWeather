@@ -22,8 +22,16 @@ class Models {
         val name: String,
         val country: String,
         val img: Int,
-        val foreCast: String
+        val foreCast: Int,
+        val primaryWeatherEvent: WeatherEvent,
+        val secondaryWeatherEvent: WeatherEvent
     )
+}
+
+sealed class WeatherEvent {
+    data class Sun(val level: Int) : WeatherEvent()
+    data class Snow(val level: Int) : WeatherEvent()
+    data class Rain(val level: Int) : WeatherEvent()
 }
 
 val cityItems = listOf<Models.CityItem>(
@@ -31,90 +39,120 @@ val cityItems = listOf<Models.CityItem>(
         name = "Sydney",
         country = "Australia",
         img = R.drawable.sydney,
-        foreCast = ""
+        foreCast = 30,
+        primaryWeatherEvent = WeatherEvent.Sun(level = 2),
+        secondaryWeatherEvent = WeatherEvent.Rain(level = 1)
     ),
     Models.CityItem(
         name = "New York",
         country = "USA",
         img = R.drawable.ny,
-        foreCast = ""
+        foreCast = -3,
+        primaryWeatherEvent = WeatherEvent.Snow(level = 2),
+        secondaryWeatherEvent = WeatherEvent.Sun(level = -1)
     ),
     Models.CityItem(
         name = "Washington D.C.",
         country = "USA",
         img = R.drawable.dc,
-        foreCast = ""
+        foreCast = -4,
+        primaryWeatherEvent = WeatherEvent.Snow(level = 2),
+        secondaryWeatherEvent = WeatherEvent.Sun(level = -1)
     ),
     Models.CityItem(
         name = "Tokyo",
         country = "Japan",
         img = R.drawable.tokyo,
-        foreCast = ""
+        foreCast = 24,
+        primaryWeatherEvent = WeatherEvent.Rain(level = 2),
+        secondaryWeatherEvent = WeatherEvent.Sun(level = 1)
     ),
     Models.CityItem(
         name = "Barcelona",
         country = "Spain",
         img = R.drawable.barcelona,
-        foreCast = ""
+        foreCast = 25,
+        primaryWeatherEvent = WeatherEvent.Sun(level = 2),
+        secondaryWeatherEvent = WeatherEvent.Rain(level = 1)
     ),
     Models.CityItem(
         name = "Berlin",
         country = "Germany",
         img = R.drawable.berlin,
-        foreCast = ""
+        foreCast = 3,
+        primaryWeatherEvent = WeatherEvent.Snow(level = 2),
+        secondaryWeatherEvent = WeatherEvent.Sun(level = -1)
     ),
     Models.CityItem(
         name = "London",
         country = "UK",
         img = R.drawable.london,
-        foreCast = ""
+        foreCast = 14,
+        primaryWeatherEvent = WeatherEvent.Rain(level = 2),
+        secondaryWeatherEvent = WeatherEvent.Sun(level = 0)
     ),
     Models.CityItem(
         name = "Hong Kong",
         country = "Hong Kong",
         img = R.drawable.hk,
-        foreCast = ""
+        foreCast = 33,
+        primaryWeatherEvent = WeatherEvent.Rain(level = 2),
+        secondaryWeatherEvent = WeatherEvent.Sun(level = 2)
     ),
     Models.CityItem(
         name = "Moscow",
         country = "Russia",
         img = R.drawable.moscow,
-        foreCast = ""
+        foreCast = 1,
+        primaryWeatherEvent = WeatherEvent.Snow(level = 2),
+        secondaryWeatherEvent = WeatherEvent.Sun(level = 0)
     ),
     Models.CityItem(
         name = "Athens",
         country = "Greece",
         img = R.drawable.athens,
-        foreCast = ""
+        foreCast = 25,
+        primaryWeatherEvent = WeatherEvent.Rain(level = 2),
+        secondaryWeatherEvent = WeatherEvent.Sun(level = 2)
     ),
     Models.CityItem(
         name = "Vienna",
         country = "Austria",
         img = R.drawable.vienna,
-        foreCast = ""
+        foreCast = 4,
+        primaryWeatherEvent = WeatherEvent.Snow(level = 2),
+        secondaryWeatherEvent = WeatherEvent.Sun(level = -1)
     ),
     Models.CityItem(
         name = "Paris",
         country = "France",
         img = R.drawable.paris,
-        foreCast = ""
+        foreCast = 24,
+        primaryWeatherEvent = WeatherEvent.Rain(level = 1),
+        secondaryWeatherEvent = WeatherEvent.Sun(level = 2)
     ),
     Models.CityItem(
         name = "Delhi",
         country = "India",
         img = R.drawable.delhi,
-        foreCast = ""
+        foreCast = 35,
+        primaryWeatherEvent = WeatherEvent.Rain(level = 2),
+        secondaryWeatherEvent = WeatherEvent.Sun(level = 2)
     ),
     Models.CityItem(
         name = "Rio De Janeiro",
         country = "Brazil",
         img = R.drawable.rdj,
-        foreCast = ""
+        foreCast = 36,
+        primaryWeatherEvent = WeatherEvent.Sun(level = 2),
+        secondaryWeatherEvent = WeatherEvent.Rain(level = 1)
     ),
     Models.CityItem(
         name = "Dubai",
         country = "UAE",
         img = R.drawable.dubai,
-        foreCast = ""
+        foreCast = 38,
+        primaryWeatherEvent = WeatherEvent.Sun(level = 3),
+        secondaryWeatherEvent = WeatherEvent.Rain(level = -1)
     )
 )
