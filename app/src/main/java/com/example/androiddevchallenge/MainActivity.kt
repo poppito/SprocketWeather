@@ -34,8 +34,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -131,7 +129,9 @@ private fun Sprocket(
                 }
                 .padding(8.dp)
         )
-        Card(
+        Image(
+            painter = painterResource(id = R.drawable.sprocket),
+            contentDescription = stringResource(id = R.string.cd_sprocket),
             modifier = Modifier
                 .rotate(rotation.value)
                 .padding(16.dp)
@@ -139,14 +139,8 @@ private fun Sprocket(
                     onClick = {
                         // TODO
                     }
-                ),
-            shape = CircleShape
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.sprocket),
-                contentDescription = stringResource(id = R.string.cd_sprocket)
-            )
-        }
+                )
+        )
         Image(
             painter = painterResource(id = R.drawable.btn_right),
             contentDescription = stringResource(
@@ -198,7 +192,8 @@ private fun City(data: Models.CityItem, selected: Boolean = false) {
             .fillMaxWidth()
             .fillMaxHeight(0.4f)
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         if (selected) {
             Box(
