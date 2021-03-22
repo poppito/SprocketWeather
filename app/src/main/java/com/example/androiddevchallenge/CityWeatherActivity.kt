@@ -123,7 +123,7 @@ fun CityWeatherDetail(data: Models.CityItem) {
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = if (data.primaryWeatherEvent is WeatherEvent.Rain) Alignment.End else CenterHorizontally
+                horizontalAlignment = if (data.primaryWeatherEvent is WeatherEvent.Snow) CenterHorizontally else Alignment.End
             ) {
                 ShowAnimation(primaryWeatherEvent = data.primaryWeatherEvent)
                 Text(
@@ -183,18 +183,31 @@ fun CityWeatherDetail(data: Models.CityItem) {
 
 @Composable
 private fun ShowOvercast() {
-    ShowSun()
-    Cloud()
+    Box {
+        ShowSun()
+        Cloud()
+    }
 }
 
 @Composable
-private fun ShowSun() {
+private fun ShowSun(showRotate: Boolean = false) {
     val infiniteTransition = rememberInfiniteTransition()
+    val offsetTransition = rememberInfiniteTransition()
+
     val rotate = infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 360f,
         animationSpec = infiniteRepeatable(
             animation = tween(3000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        )
+    )
+
+    val offset = offsetTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 100f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(3000, easing = FastOutLinearInEasing),
             repeatMode = RepeatMode.Restart
         )
     )
@@ -205,7 +218,10 @@ private fun ShowSun() {
         modifier = Modifier
             .padding(16.dp)
             .size(width = 120.dp, height = 120.dp)
-            .rotate(rotate.value)
+            .rotate(if (showRotate) rotate.value else 0f)
+            .offset(
+                x = if (!showRotate) -offset.value.dp else 0.dp, y = 0.dp
+            )
     )
 }
 

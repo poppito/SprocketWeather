@@ -128,8 +128,8 @@ val cityItems = listOf<Models.CityItem>(
         country = "France",
         img = R.drawable.paris,
         foreCast = 24,
-        primaryWeatherEvent = WeatherEvent.Rain(level = 1),
-        secondaryWeatherEvent = WeatherEvent.Sun(level = 2)
+        secondaryWeatherEvent = WeatherEvent.Rain(level = 1),
+        primaryWeatherEvent = WeatherEvent.Sun(level = 1),
     ),
     Models.CityItem(
         name = "Delhi",
@@ -144,7 +144,7 @@ val cityItems = listOf<Models.CityItem>(
         country = "Brazil",
         img = R.drawable.rdj,
         foreCast = 36,
-        primaryWeatherEvent = WeatherEvent.Sun(level = 2),
+        primaryWeatherEvent = WeatherEvent.Sun(level = 1),
         secondaryWeatherEvent = WeatherEvent.Rain(level = 1)
     ),
     Models.CityItem(
