@@ -190,22 +190,11 @@ private fun ShowOvercast() {
 }
 
 @Composable
-private fun ShowSun(showRotate: Boolean = false) {
-    val infiniteTransition = rememberInfiniteTransition()
+private fun ShowSun() {
     val offsetTransition = rememberInfiniteTransition()
-
-    val rotate = infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(3000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        )
-    )
-
     val offset = offsetTransition.animateFloat(
         initialValue = 0f,
-        targetValue = 100f,
+        targetValue = 180f,
         animationSpec = infiniteRepeatable(
             animation = tween(3000, easing = FastOutLinearInEasing),
             repeatMode = RepeatMode.Restart
@@ -217,10 +206,9 @@ private fun ShowSun(showRotate: Boolean = false) {
         contentDescription = "",
         modifier = Modifier
             .padding(16.dp)
-            .size(width = 120.dp, height = 120.dp)
-            .rotate(if (showRotate) rotate.value else 0f)
+            .size(width = 140.dp, height = 140.dp)
             .offset(
-                x = if (!showRotate) -offset.value.dp else 0.dp, y = 0.dp
+                x = -offset.value.dp, y = 0.dp
             )
     )
 }
@@ -342,7 +330,7 @@ private fun Cloud() {
     val infiniteTransition = rememberInfiniteTransition()
     val tx = infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = 200f,
+        targetValue = 240f,
         animationSpec = infiniteRepeatable(
             animation = tween(3000, easing = FastOutLinearInEasing),
             repeatMode = RepeatMode.Restart
@@ -353,7 +341,8 @@ private fun Cloud() {
         contentDescription = "",
         modifier = Modifier
             .padding(top = 24.dp, end = 16.dp)
-            .offset(x = -tx.value.dp, y = 0.dp)
+            .offset(x = -tx.value.dp, y = 0.dp),
+        colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
     )
 }
 
