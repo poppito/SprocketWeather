@@ -19,12 +19,14 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,17 +40,25 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.androiddevchallenge.Constants.Companion.CITY_NAME
 import com.example.androiddevchallenge.model.Models
 import com.example.androiddevchallenge.model.WeatherEvent
 import com.example.androiddevchallenge.model.cityItems
 import com.example.androiddevchallenge.ui.theme.MyTheme
+import com.example.androiddevchallenge.ui.theme.bodyFont
+import com.example.androiddevchallenge.ui.theme.headerFont
+import com.example.androiddevchallenge.ui.theme.italicFont
+import extensions.getForecastFromWeatherEvents
 
 class CityWeatherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,21 +87,21 @@ private fun ShowAnimation(
     when (primaryWeatherEvent) {
         is WeatherEvent.Sun -> {
             if (primaryWeatherEvent.level > 1) {
-                // Sun()
+                ShowSun()
             } else {
-                // Overcast()
+                ShowOvercast()
             }
         }
         is WeatherEvent.Rain -> {
             if (primaryWeatherEvent.level > 1) {
-                // Rain()
+                ShowRain()
             } else {
                 // RainAndSun()
             }
         }
         is WeatherEvent.Snow -> {
             if (primaryWeatherEvent.level > 1) {
-                // Snow()
+                ShowSnow()
             } else {
                 // SunAndSnow()
             }
@@ -105,54 +115,123 @@ fun CityWeatherDetail(data: Models.CityItem) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.5f)
+                .fillMaxHeight(0.7f)
+                .background(color = MaterialTheme.colors.onBackground)
         ) {
-            Row(modifier = Modifier.fillMaxSize()) {
-                Column(Modifier.fillMaxSize(0.7f)) {
-                    Text(
-                        text = stringResource(
-                            id = R.string.txt_degrees, data.foreCast
-                        ),
-                        textAlign = TextAlign.Start,
-                        style = MaterialTheme.typography.h1,
-                        modifier = Modifier.padding(start = 16.dp, top = 48.dp)
-                    )
-                    Text(
-                        text = data.name,
-                        style = MaterialTheme.typography.h1,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier.padding(start = 16.dp, bottom = 16.dp)
-                    )
-                    Text(
-                        text = data.country,
-                        style = MaterialTheme.typography.h1,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier.padding(start = 16.dp, bottom = 16.dp)
-                    )
-                }
-                Box(modifier = Modifier.fillMaxSize()) {
-                    Image(
-                        painter = painterResource(id = R.drawable.sun),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .size(width = 120.dp, height = 120.dp)
-                    )
-                    Image(
-                        painter = painterResource(id = R.drawable.snowflake),
-                        contentDescription = "",
-                        modifier = Modifier.padding(16.dp)
-                    )
-                    Rain()
-                    Cloud()
-                }
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                ShowAnimation(primaryWeatherEvent = data.primaryWeatherEvent)
+                Text(
+                    text = stringResource(
+                        id = R.string.txt_degrees, data.foreCast
+                    ),
+                    textAlign = TextAlign.Center,
+                    style = TextStyle(
+                        color = MaterialTheme.colors.background,
+                        fontSize = 40.sp,
+                        fontFamily = headerFont
+                    ),
+                    modifier = Modifier.padding(start = 16.dp, top = 48.dp, end = 16.dp)
+                )
+                Text(
+                    text = data.name,
+                    style = TextStyle(
+                        color = MaterialTheme.colors.background,
+                        fontSize = 24.sp,
+                        fontFamily = headerFont
+                    ),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+                )
+                Text(
+                    text = data.country,
+                    style = TextStyle(
+                        color = MaterialTheme.colors.background,
+                        fontSize = 22.sp,
+                        fontFamily = bodyFont
+                    ),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+                )
+                Text(
+                    text = data.getForecastFromWeatherEvents(),
+                    style = TextStyle(
+                        color = MaterialTheme.colors.background,
+                        fontSize = 20.sp,
+                        fontFamily = italicFont
+                    ),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(start = 16.dp, bottom = 16.dp, end = 16.dp)
+                )
             }
         }
     }
 }
 
 @Composable
-fun Cloud() {
+private fun ShowOvercast() {
+    ShowSun()
+    Cloud()
+}
+
+@Composable
+private fun ShowSun() {
+    val infiniteTransition = rememberInfiniteTransition()
+    val rotate = infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(3000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        )
+    )
+
+    Image(
+        painter = painterResource(id = R.drawable.sun),
+        contentDescription = "",
+        modifier = Modifier
+            .padding(16.dp)
+            .size(width = 120.dp, height = 120.dp)
+            .rotate(rotate.value)
+    )
+}
+
+@Composable
+private fun ShowSnow() {
+    Row() {
+        Image(
+            painter = painterResource(id = R.drawable.snowflake1),
+            contentDescription = "",
+            modifier = Modifier.padding(top = 16.dp, end = 16.dp)
+        )
+        Image(
+            painter = painterResource(id = R.drawable.snowflake2),
+            contentDescription = "",
+            modifier = Modifier.padding(top = 16.dp, end = 40.dp)
+        )
+        Image(
+            painter = painterResource(id = R.drawable.snowflake3),
+            contentDescription = "",
+            modifier = Modifier.padding(top = 16.dp, end = 64.dp)
+        )
+        Image(
+            painter = painterResource(id = R.drawable.snowflake4),
+            contentDescription = "",
+            modifier = Modifier.padding(top = 16.dp, end = 90.dp)
+        )
+    }
+}
+
+@Composable
+private fun ShowRain() {
+    Cloud()
+    Rain()
+}
+
+@Composable
+private fun Cloud() {
     val infiniteTransition = rememberInfiniteTransition()
     val tx = infiniteTransition.animateFloat(
         initialValue = 0f,
@@ -172,7 +251,7 @@ fun Cloud() {
 }
 
 @Composable
-fun Rain() {
+private fun Rain() {
     val infiniteTransition = rememberInfiniteTransition()
     val tx = infiniteTransition.animateFloat(
         initialValue = 0f,
@@ -188,7 +267,7 @@ fun Rain() {
         contentDescription = "",
         modifier = Modifier
             .offset(x = -tx.value.dp, y = tx.value.dp)
-            .padding(top = 68.dp, end = 24.dp)
+            .padding(end = 24.dp)
     )
 }
 

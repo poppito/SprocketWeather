@@ -28,13 +28,13 @@ fun Models.CityItem.getForecastFromWeatherEvents(): String {
         is WeatherEvent.Sun -> {
             return when (primaryWeatherEvent.level) {
                 0 -> {
-                    "A cold day with temperature of 7 degrees, with a minium temperature of -3 degrees overnight"
+                    "A cold day with a maximum temperature of 7 degrees, with a minium temperature of -3 degrees overnight"
                 }
                 1 -> {
-                    "A pleasant day with a temperature of 25 degrees and a minium temperature of 14 degrees overnight"
+                    "A pleasant day with a maximum temperature of 25 degrees and a minium temperature of 14 degrees overnight"
                 }
                 2 -> {
-                    "A warm day with a temperature of 36 degrees and a minium temperature of 21 degrees overnight"
+                    "A warm day with a maximum temperature of 36 degrees and a minium temperature of 21 degrees overnight"
                 }
                 else -> {
                     "A chilly day with a maximum temperature of -2 degrees and a minium temperature of -13 degrees overnight"
@@ -44,13 +44,13 @@ fun Models.CityItem.getForecastFromWeatherEvents(): String {
         is WeatherEvent.Rain -> {
             return when (primaryWeatherEvent.level) {
                 0 -> {
-                    "A mostly clear day with patches of rain, less than 1 MM"
+                    "A mostly clear day with patches of rain, less than 1 mm"
                 }
                 1 -> {
-                    "A mild day but some rain forecast over the afternoon or late evening, about 3 MM"
+                    "A mild day but some rain forecast over the afternoon or late evening, about 3 mm"
                 }
                 2 -> {
-                    "A cloudy day with a chance of thunderstorms and heavy rain throughout, about 12MM forecast - best to carry an umbrella!"
+                    "A cloudy day with a chance of thunderstorms and heavy rain throughout, about 12mm forecast - best to carry an umbrella!"
                 }
                 else -> {
                     "No chance of any rain today and perhaps a pleasant day for a picnic in the park!"
@@ -60,16 +60,16 @@ fun Models.CityItem.getForecastFromWeatherEvents(): String {
         is WeatherEvent.Snow -> {
             return when (primaryWeatherEvent.level) {
                 0 -> {
-                    "Low chance of snow today - breaks in the overcast later - winds N at 15 to 20 mph"
+                    "Low chance of snow today - breaks in the overcast later - winds N at 15 to 20 mph. Maximum temperature of 7 degrees"
                 }
                 1 -> {
-                    "Medium chance of snow today - winds N at 12 to 15 mph. Forecast snow of about 2 inches"
+                    "Medium chance of snow today - winds N at 12 to 15 mph. Forecast snow of about 2 inches. Maximum temperature of 4 degrees"
                 }
                 2 -> {
-                    "High chance of snow today - winds N at 30 to 40 mph. Forecast snow of about 6 inches"
+                    "High chance of snow today - winds N at 30 to 40 mph. Forecast snow of about 6 inches. Maximum temperature of 1 degrees"
                 }
                 else -> {
-                    "no chance of snow today - winds N at 5 to 10 mph"
+                    "no chance of snow today - winds N at 5 to 10 mph. Maximum temperature of 14 degrees"
                 }
             }
         }
