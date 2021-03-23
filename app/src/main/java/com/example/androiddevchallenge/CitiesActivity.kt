@@ -75,7 +75,6 @@ import com.example.androiddevchallenge.ui.theme.headerFont
 import com.example.androiddevchallenge.ui.theme.italicFont
 import extensions.capitalCase
 import extensions.getForecastFromWeatherEvents
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class CitiesActivity : AppCompatActivity() {
@@ -92,32 +91,47 @@ class CitiesActivity : AppCompatActivity() {
 @Composable
 fun AddLayoutElements(data: List<Models.CityItem>) {
     Surface(color = MaterialTheme.colors.background) {
-        val listState = rememberLazyListState()
         val selection = remember { mutableStateOf(0) }
-        val coroutineScope = rememberCoroutineScope()
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Cities(data = data, state = listState, selection = selection)
-            Spacer(modifier = Modifier.fillMaxSize(0.2f))
-            Sprocket(
-                listState = listState,
-                coroutineScope = coroutineScope,
-                selection = selection
-            )
+        val currentCity = remember { mutableStateOf(-1) }
+
+        if (currentCity.value == -1) {
+            ShowCities(selection, data = data, currentCity = currentCity)
+        } else {
+            CityWeatherDetail(data = data[currentCity.value], currentCity)
         }
+    }
+}
+
+@Composable
+fun ShowCities(
+    selection: MutableState<Int>,
+    data: List<Models.CityItem>,
+    currentCity: MutableState<Int>
+) {
+    val listState = rememberLazyListState()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Cities(data = data, state = listState, selection = selection)
+        Spacer(modifier = Modifier.fillMaxSize(0.2f))
+        Sprocket(
+            listState = listState,
+            selection = selection,
+            currentCity = currentCity
+        )
     }
 }
 
 @Composable
 private fun Sprocket(
     listState: LazyListState,
-    coroutineScope: CoroutineScope,
-    selection: MutableState<Int>
+    selection: MutableState<Int>,
+    currentCity: MutableState<Int>
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val rotation = remember { mutableStateOf(0f) }
     Row(
@@ -154,7 +168,7 @@ private fun Sprocket(
                 .padding(16.dp)
                 .clickable(
                     onClick = {
-                        // TODO
+                        currentCity.value = selection.value
                     }
                 )
         )
@@ -324,7 +338,7 @@ private fun ShowWeatherAnimation(
 }
 
 @Composable
-fun CityWeatherDetail(data: Models.CityItem) {
+fun CityWeatherDetail(data: Models.CityItem, currentCity: MutableState<Int>) {
     Column {
         Box(
             modifier = Modifier
@@ -332,6 +346,15 @@ fun CityWeatherDetail(data: Models.CityItem) {
                 .fillMaxHeight(0.7f)
                 .background(color = MaterialTheme.colors.background)
         ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_close),
+                contentDescription = stringResource(
+                    id = R.string.txt_close
+                ),
+                modifier = Modifier
+                    .padding(start = 16.dp, top = 16.dp)
+                    .clickable { currentCity.value = -1 }
+            )
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = if (data.primaryWeatherEvent is WeatherEvent.Snow) Alignment.CenterHorizontally else Alignment.End
