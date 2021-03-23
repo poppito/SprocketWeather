@@ -22,5 +22,6 @@ class Constants {
         const val SUNNY = "sunny"
         const val RAINY = "rainy"
         const val SNOWY = "snowy"
+        const val OVERCAST = "overcast"
     }
 }

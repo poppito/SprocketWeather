@@ -15,6 +15,7 @@
  */
 package com.example.androiddevchallenge.model
 
+import com.example.androiddevchallenge.Constants.Companion.OVERCAST
 import com.example.androiddevchallenge.Constants.Companion.RAINY
 import com.example.androiddevchallenge.Constants.Companion.SNOWY
 import com.example.androiddevchallenge.Constants.Companion.SUNNY
@@ -86,8 +87,8 @@ val cityItems = listOf<Models.CityItem>(
             Models.WeatherPreviewItem(27, day = R.string.txt_tomorrow, weather = RAINY),
             Models.WeatherPreviewItem(26, day = R.string.txt_wednesday, weather = SUNNY),
             Models.WeatherPreviewItem(30, day = R.string.txt_thursday, weather = RAINY),
-            Models.WeatherPreviewItem(25, day = R.string.txt_friday, weather = SUNNY),
-            Models.WeatherPreviewItem(23, day = R.string.txt_saturday, weather = SUNNY),
+            Models.WeatherPreviewItem(25, day = R.string.txt_friday, weather = OVERCAST),
+            Models.WeatherPreviewItem(23, day = R.string.txt_saturday, weather = OVERCAST),
         )
     ),
     Models.CityItem(
@@ -102,7 +103,7 @@ val cityItems = listOf<Models.CityItem>(
             Models.WeatherPreviewItem(32, day = R.string.txt_wednesday, weather = SUNNY),
             Models.WeatherPreviewItem(30, day = R.string.txt_thursday, weather = RAINY),
             Models.WeatherPreviewItem(24, day = R.string.txt_friday, weather = RAINY),
-            Models.WeatherPreviewItem(27, day = R.string.txt_saturday, weather = SUNNY),
+            Models.WeatherPreviewItem(27, day = R.string.txt_saturday, weather = OVERCAST),
         )
     ),
     Models.CityItem(
@@ -128,7 +129,7 @@ val cityItems = listOf<Models.CityItem>(
         primaryWeatherEvent = WeatherEvent.Rain(level = 2),
         map = R.drawable.london_map,
         weatherPreviews = listOf(
-            Models.WeatherPreviewItem(17, day = R.string.txt_tomorrow, weather = SUNNY),
+            Models.WeatherPreviewItem(17, day = R.string.txt_tomorrow, weather = OVERCAST),
             Models.WeatherPreviewItem(17, day = R.string.txt_wednesday, weather = SUNNY),
             Models.WeatherPreviewItem(20, day = R.string.txt_thursday, weather = RAINY),
             Models.WeatherPreviewItem(19, day = R.string.txt_friday, weather = RAINY),
@@ -144,7 +145,7 @@ val cityItems = listOf<Models.CityItem>(
         map = R.drawable.hk_map,
         weatherPreviews = listOf(
             Models.WeatherPreviewItem(28, day = R.string.txt_tomorrow, weather = SUNNY),
-            Models.WeatherPreviewItem(32, day = R.string.txt_wednesday, weather = SUNNY),
+            Models.WeatherPreviewItem(32, day = R.string.txt_wednesday, weather = OVERCAST),
             Models.WeatherPreviewItem(33, day = R.string.txt_thursday, weather = RAINY),
             Models.WeatherPreviewItem(33, day = R.string.txt_friday, weather = RAINY),
             Models.WeatherPreviewItem(29, day = R.string.txt_saturday, weather = SUNNY),
@@ -159,7 +160,7 @@ val cityItems = listOf<Models.CityItem>(
         map = R.drawable.athens_map,
         weatherPreviews = listOf(
             Models.WeatherPreviewItem(19, day = R.string.txt_tomorrow, weather = SUNNY),
-            Models.WeatherPreviewItem(19, day = R.string.txt_wednesday, weather = SUNNY),
+            Models.WeatherPreviewItem(19, day = R.string.txt_wednesday, weather = OVERCAST),
             Models.WeatherPreviewItem(23, day = R.string.txt_thursday, weather = RAINY),
             Models.WeatherPreviewItem(25, day = R.string.txt_friday, weather = SUNNY),
             Models.WeatherPreviewItem(27, day = R.string.txt_saturday, weather = SUNNY),
@@ -177,7 +178,7 @@ val cityItems = listOf<Models.CityItem>(
             Models.WeatherPreviewItem(7, day = R.string.txt_wednesday, weather = SNOWY),
             Models.WeatherPreviewItem(11, day = R.string.txt_thursday, weather = SUNNY),
             Models.WeatherPreviewItem(16, day = R.string.txt_friday, weather = SUNNY),
-            Models.WeatherPreviewItem(14, day = R.string.txt_saturday, weather = SUNNY),
+            Models.WeatherPreviewItem(14, day = R.string.txt_saturday, weather = OVERCAST),
         )
     ),
     Models.CityItem(
@@ -189,9 +190,9 @@ val cityItems = listOf<Models.CityItem>(
         map = R.drawable.paris_map,
         weatherPreviews = listOf(
             Models.WeatherPreviewItem(19, day = R.string.txt_tomorrow, weather = SUNNY),
-            Models.WeatherPreviewItem(19, day = R.string.txt_wednesday, weather = SUNNY),
+            Models.WeatherPreviewItem(19, day = R.string.txt_wednesday, weather = OVERCAST),
             Models.WeatherPreviewItem(23, day = R.string.txt_thursday, weather = RAINY),
-            Models.WeatherPreviewItem(25, day = R.string.txt_friday, weather = SUNNY),
+            Models.WeatherPreviewItem(25, day = R.string.txt_friday, weather = OVERCAST),
             Models.WeatherPreviewItem(27, day = R.string.txt_saturday, weather = SUNNY),
         )
     ),
@@ -218,7 +219,7 @@ val cityItems = listOf<Models.CityItem>(
         primaryWeatherEvent = WeatherEvent.Sun(level = 1),
         map = R.drawable.rdj_map,
         weatherPreviews = listOf(
-            Models.WeatherPreviewItem(33, day = R.string.txt_tomorrow, weather = SUNNY),
+            Models.WeatherPreviewItem(33, day = R.string.txt_tomorrow, weather = OVERCAST),
             Models.WeatherPreviewItem(34, day = R.string.txt_wednesday, weather = SUNNY),
             Models.WeatherPreviewItem(30, day = R.string.txt_thursday, weather = RAINY),
             Models.WeatherPreviewItem(22, day = R.string.txt_friday, weather = RAINY),
@@ -233,8 +234,8 @@ val cityItems = listOf<Models.CityItem>(
         primaryWeatherEvent = WeatherEvent.Sun(level = 3),
         map = R.drawable.abu_dhabi_map,
         weatherPreviews = listOf(
-            Models.WeatherPreviewItem(40, day = R.string.txt_tomorrow, weather = SUNNY),
-            Models.WeatherPreviewItem(39, day = R.string.txt_wednesday, weather = SUNNY),
+            Models.WeatherPreviewItem(40, day = R.string.txt_tomorrow, weather = OVERCAST),
+            Models.WeatherPreviewItem(39, day = R.string.txt_wednesday, weather = OVERCAST),
             Models.WeatherPreviewItem(39, day = R.string.txt_thursday, weather = SUNNY),
             Models.WeatherPreviewItem(40, day = R.string.txt_friday, weather = SUNNY),
             Models.WeatherPreviewItem(41, day = R.string.txt_saturday, weather = SUNNY),

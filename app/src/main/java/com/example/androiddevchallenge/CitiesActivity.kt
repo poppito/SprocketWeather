@@ -492,7 +492,7 @@ fun ShowSmallPreviewItem(day: String, temperature: Int, weatherEvent: String) {
         when (weatherEvent) {
             Constants.SNOWY -> {
                 Image(
-                    painterResource(id = R.drawable.snowflake1),
+                    painterResource(id = R.drawable.snow_small),
                     contentDescription = stringResource(id = R.string.cd_snowy),
                     modifier = Modifier
                         .size(50.dp)
@@ -502,7 +502,7 @@ fun ShowSmallPreviewItem(day: String, temperature: Int, weatherEvent: String) {
             }
             Constants.RAINY -> {
                 Image(
-                    painterResource(id = R.drawable.rain_cloud),
+                    painterResource(id = R.drawable.rain_small),
                     contentDescription = stringResource(id = R.string.cd_snowy),
                     modifier = Modifier.size(50.dp),
                     colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
@@ -510,7 +510,17 @@ fun ShowSmallPreviewItem(day: String, temperature: Int, weatherEvent: String) {
             }
             Constants.SUNNY -> {
                 Image(
-                    painterResource(id = R.drawable.sun),
+                    painterResource(id = R.drawable.sun_small),
+                    contentDescription = stringResource(id = R.string.cd_snowy),
+                    modifier = Modifier
+                        .size(50.dp)
+                        .rotate(rotate.value),
+                    colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
+                )
+            }
+            Constants.OVERCAST -> {
+                Image(
+                    painterResource(id = R.drawable.overcast_small),
                     contentDescription = stringResource(id = R.string.cd_snowy),
                     modifier = Modifier
                         .size(50.dp)
