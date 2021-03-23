@@ -125,7 +125,7 @@ private fun Cities(
     LazyVerticalGrid(
         modifier = Modifier
             .fillMaxWidth(),
-        cells = GridCells.Adaptive(minSize = 128.dp)
+        cells = GridCells.Adaptive(minSize = 100.dp)
     ) {
         // items
         items(data.size) { index ->
@@ -413,21 +413,11 @@ private fun ShowRain() {
 
 @Composable
 private fun Cloud() {
-    val infiniteTransition = rememberInfiniteTransition()
-    val tx = infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 240f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(3000, easing = FastOutLinearInEasing),
-            repeatMode = RepeatMode.Restart
-        )
-    )
     Image(
         painter = painterResource(id = R.drawable.cloud),
         contentDescription = "",
         modifier = Modifier
-            .padding(top = 24.dp, end = 16.dp)
-            .offset(x = -tx.value.dp, y = 0.dp),
+            .padding(top = 24.dp, end = 16.dp),
         colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
     )
 }
@@ -523,8 +513,8 @@ fun ShowSmallPreviewItem(day: String, temperature: Int, weatherEvent: String) {
                     painterResource(id = R.drawable.overcast_small),
                     contentDescription = stringResource(id = R.string.cd_snowy),
                     modifier = Modifier
-                        .size(50.dp)
-                        .rotate(rotate.value)
+                        .size(50.dp),
+                    colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
                 )
             }
         }
