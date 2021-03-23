@@ -84,7 +84,7 @@ enum class RainState() {
 }
 
 @Composable
-private fun ShowAnimation(
+private fun ShowWeatherAnimation(
     primaryWeatherEvent: WeatherEvent
 ) {
     when (primaryWeatherEvent) {
@@ -125,7 +125,7 @@ fun CityWeatherDetail(data: Models.CityItem) {
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = if (data.primaryWeatherEvent is WeatherEvent.Snow) CenterHorizontally else Alignment.End
             ) {
-                ShowAnimation(primaryWeatherEvent = data.primaryWeatherEvent)
+                ShowWeatherAnimation(primaryWeatherEvent = data.primaryWeatherEvent)
                 Text(
                     text = stringResource(
                         id = R.string.txt_degrees, data.foreCast
