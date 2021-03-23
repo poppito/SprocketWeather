@@ -29,6 +29,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,6 +55,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -202,8 +204,8 @@ fun CityWeatherDetail(data: Models.CityItem, currentCity: MutableState<Int>) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = MaterialTheme.colors.background)
         ) {
+            DrawBackground(weatherEvent = data.primaryWeatherEvent)
             Image(
                 painter = painterResource(id = R.drawable.ic_close),
                 contentDescription = stringResource(
@@ -218,58 +220,13 @@ fun CityWeatherDetail(data: Models.CityItem, currentCity: MutableState<Int>) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                ShowWeatherAnimation(primaryWeatherEvent = data.primaryWeatherEvent)
-                Text(
-                    text = stringResource(
-                        id = R.string.txt_degrees, data.foreCast
-                    ),
-                    textAlign = TextAlign.Center,
-                    style = TextStyle(
-                        color = MaterialTheme.colors.onBackground,
-                        fontSize = 24.sp,
-                        fontFamily = headerFont
-                    ),
-                    modifier = Modifier
-                        .padding(start = 16.dp, end = 16.dp)
-                        .offset(x = 0.dp, y = (-16).dp)
-                        .fillMaxWidth()
-                )
-                Text(
-                    text = data.name,
-                    style = TextStyle(
-                        color = MaterialTheme.colors.onBackground,
-                        fontSize = 20.sp,
-                        fontFamily = headerFont
-                    ),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .padding(start = 16.dp, end = 16.dp)
-                        .fillMaxWidth()
-                )
-                Text(
-                    text = data.country,
-                    style = TextStyle(
-                        color = MaterialTheme.colors.onBackground,
-                        fontSize = 18.sp,
-                        fontFamily = bodyFont
-                    ),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .padding(start = 16.dp, end = 16.dp)
-                        .fillMaxWidth()
-                )
-                Text(
-                    text = data.getForecastFromWeatherEvents(),
-                    style = TextStyle(
-                        color = MaterialTheme.colors.onBackground,
-                        fontSize = 16.sp,
-                        fontFamily = italicFont
-                    ),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .padding(start = 16.dp, bottom = 16.dp, end = 16.dp)
-                        .fillMaxWidth()
-                )
+                Column(
+                    modifier = Modifier.fillMaxHeight(0.3f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    ShowWeatherAnimation(primaryWeatherEvent = data.primaryWeatherEvent)
+                }
+                WeatherText(data = data)
                 Box(modifier = Modifier.fillMaxWidth()) {
                     Image(
                         painterResource(id = data.map),
@@ -284,11 +241,110 @@ fun CityWeatherDetail(data: Models.CityItem, currentCity: MutableState<Int>) {
 }
 
 @Composable
+private fun DrawBackground(weatherEvent: WeatherEvent) {
+    when (weatherEvent) {
+        is WeatherEvent.Sun -> {
+            if (weatherEvent.level > 1) {
+                Image(
+                    painterResource(id = R.drawable.bg_sunny),
+                    contentDescription = "",
+                    modifier = Modifier.fillMaxHeight(),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Image(
+                    painterResource(id = R.drawable.bg_rain),
+                    contentDescription = "",
+                    modifier = Modifier.fillMaxHeight(),
+                    contentScale = ContentScale.Crop
+                )
+            }
+        }
+        is WeatherEvent.Rain -> {
+            Image(
+                painterResource(id = R.drawable.bg_rain),
+                contentDescription = "",
+                modifier = Modifier.fillMaxHeight(),
+                contentScale = ContentScale.Crop
+            )
+        }
+        is WeatherEvent.Snow -> {
+            Image(
+                painterResource(id = R.drawable.bg_snow),
+                contentDescription = "",
+                modifier = Modifier.fillMaxHeight(),
+                contentScale = ContentScale.Crop
+            )
+        }
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = if (isSystemInDarkTheme()) Color(0xd0000000) else Color(0xd0ffffff))
+    )
+}
+
+@Composable
 private fun ShowOvercast() {
     Box {
         ShowSun()
         Cloud()
     }
+}
+
+@Composable
+private fun WeatherText(data: Models.CityItem) {
+    Text(
+        text = stringResource(
+            id = R.string.txt_degrees, data.foreCast
+        ),
+        textAlign = TextAlign.Center,
+        style = TextStyle(
+            color = MaterialTheme.colors.onBackground,
+            fontSize = 24.sp,
+            fontFamily = headerFont
+        ),
+        modifier = Modifier
+            .padding(start = 16.dp, end = 16.dp)
+            .offset(x = 0.dp, y = (-16).dp)
+            .fillMaxWidth()
+    )
+    Text(
+        text = data.name,
+        style = TextStyle(
+            color = MaterialTheme.colors.onBackground,
+            fontSize = 20.sp,
+            fontFamily = headerFont
+        ),
+        textAlign = TextAlign.Center,
+        modifier = Modifier
+            .padding(start = 16.dp, end = 16.dp)
+            .fillMaxWidth()
+    )
+    Text(
+        text = data.country,
+        style = TextStyle(
+            color = MaterialTheme.colors.onBackground,
+            fontSize = 18.sp,
+            fontFamily = bodyFont
+        ),
+        textAlign = TextAlign.Center,
+        modifier = Modifier
+            .padding(start = 16.dp, end = 16.dp)
+            .fillMaxWidth()
+    )
+    Text(
+        text = data.getForecastFromWeatherEvents(),
+        style = TextStyle(
+            color = MaterialTheme.colors.onBackground,
+            fontSize = 16.sp,
+            fontFamily = italicFont
+        ),
+        textAlign = TextAlign.Center,
+        modifier = Modifier
+            .padding(start = 16.dp, bottom = 16.dp, end = 16.dp)
+            .fillMaxWidth()
+    )
 }
 
 @Composable
@@ -298,7 +354,7 @@ private fun ShowSun(rotate: Boolean = true) {
         initialValue = 0f, targetValue = 360f,
         animationSpec = infiniteRepeatable(
             animation = tween(3000, easing = FastOutLinearInEasing),
-            repeatMode = RepeatMode.Restart
+            repeatMode = RepeatMode.Reverse
         )
     )
 
@@ -415,7 +471,7 @@ private fun ShowRain() {
 private fun Cloud() {
     Image(
         painter = painterResource(id = R.drawable.cloud),
-        contentDescription = "",
+        contentDescription = stringResource(id = R.string.cd_overcast),
         modifier = Modifier
             .padding(top = 24.dp, end = 16.dp),
         colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
@@ -427,7 +483,7 @@ private fun Rain() {
     val infiniteTransition = rememberInfiniteTransition()
     val tx = infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = 200f,
+        targetValue = 100f,
         animationSpec = infiniteRepeatable(
             animation = tween(3000, easing = FastOutLinearInEasing),
             repeatMode = RepeatMode.Restart
@@ -436,10 +492,11 @@ private fun Rain() {
 
     Image(
         painter = painterResource(id = R.drawable.rain),
-        contentDescription = "",
+        contentDescription = stringResource(id = R.string.cd_rainy),
         modifier = Modifier
-            .offset(x = -tx.value.dp, y = tx.value.dp)
-            .padding(end = 48.dp)
+            .offset(x = 0.dp, y = tx.value.dp)
+            .padding(end = 16.dp),
+        colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
     )
 }
 

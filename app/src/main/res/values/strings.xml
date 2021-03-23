@@ -13,17 +13,18 @@
     <string name="cd_city_img">Forecast for %1$s</string>
     <string name="cd_sprocket">Drag right to rotate</string>
     <string name="txt_selected">Selected</string>
-    <string name="cd_btn_left">Left</string>
-    <string name="cd_btn_right">Right</string>
     <string name="txt_degrees">%1$d°C</string>
     <string name="txt_close">Close</string>
-    <string name="cd_map">City map</string>
-    <string name="cd_sunny">Sunny</string>
-    <string name="cd_rainy">Rainy</string>
-    <string name="cd_snowy">Snowy</string>
     <string name="txt_tomorrow">Tomorrow</string>
     <string name="txt_wednesday">Wednesday</string>
     <string name="txt_thursday">Thursday</string>
     <string name="txt_friday">Friday</string>
     <string name="txt_saturday">Saturday</string>
+
+    <!-- a11y strings -->
+    <string name="cd_map">City map</string>
+    <string name="cd_sunny">Sunny</string>
+    <string name="cd_rainy">Rainy</string>
+    <string name="cd_snowy">Snowy</string>
+    <string name="cd_overcast">Overcast</string>
 </resources>
