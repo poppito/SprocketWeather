@@ -18,4 +18,12 @@
     <string name="txt_degrees">%1$d°C</string>
     <string name="txt_close">Close</string>
     <string name="cd_map">City map</string>
+    <string name="cd_sunny">Sunny</string>
+    <string name="cd_rainy">Rainy</string>
+    <string name="cd_snowy">Snowy</string>
+    <string name="txt_tomorrow">Tomorrow</string>
+    <string name="txt_wednesday">Wednesday</string>
+    <string name="txt_thursday">Thursday</string>
+    <string name="txt_friday">Friday</string>
+    <string name="txt_saturday">Saturday</string>
 </resources>

@@ -40,7 +40,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -198,7 +200,8 @@ private fun ShowWeatherAnimation(
 fun CityWeatherDetail(data: Models.CityItem, currentCity: MutableState<Int>) {
     Column {
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .background(color = MaterialTheme.colors.background)
         ) {
             Image(
@@ -212,7 +215,8 @@ fun CityWeatherDetail(data: Models.CityItem, currentCity: MutableState<Int>) {
             )
             Column(
                 modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
             ) {
                 ShowWeatherAnimation(primaryWeatherEvent = data.primaryWeatherEvent)
                 Text(
@@ -273,6 +277,7 @@ fun CityWeatherDetail(data: Models.CityItem, currentCity: MutableState<Int>) {
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
+                SmallPreviewItems(data = data.weatherPreviews)
             }
         }
     }
@@ -344,15 +349,6 @@ private fun ShowSnow() {
 
     Row(horizontalArrangement = Arrangement.Center) {
         Image(
-            painter = painterResource(id = R.drawable.snowflake1),
-            contentDescription = "",
-            modifier = Modifier
-                .padding(top = 16.dp, end = 16.dp, bottom = 48.dp)
-                .offset(x = 1.dp, y = (tx.value + 1).dp)
-                .rotate(rotate.value),
-            colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
-        )
-        Image(
             painter = painterResource(id = R.drawable.snowflake2),
             contentDescription = "",
             modifier = Modifier
@@ -406,24 +402,6 @@ private fun ShowSnow() {
                 .rotate(rotate.value),
             colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
         )
-        Image(
-            painter = painterResource(id = R.drawable.snowflake4),
-            contentDescription = "",
-            modifier = Modifier
-                .padding(top = 16.dp, end = 16.dp, bottom = 48.dp)
-                .offset(x = 1.dp, y = (tx.value + 5).dp)
-                .rotate(rotate.value),
-            colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
-        )
-        Image(
-            painter = painterResource(id = R.drawable.snowflake1),
-            contentDescription = "",
-            modifier = Modifier
-                .padding(top = 16.dp, end = 16.dp, bottom = 48.dp)
-                .offset(x = 1.dp, y = (tx.value + 1).dp)
-                .rotate(rotate.value),
-            colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
-        )
     }
 }
 
@@ -434,7 +412,7 @@ private fun ShowRain() {
 }
 
 @Composable
-private fun Cloud(alignMiddle: Boolean = false) {
+private fun Cloud() {
     val infiniteTransition = rememberInfiniteTransition()
     val tx = infiniteTransition.animateFloat(
         initialValue = 0f,
@@ -473,6 +451,98 @@ private fun Rain() {
             .offset(x = -tx.value.dp, y = tx.value.dp)
             .padding(end = 48.dp)
     )
+}
+
+@Composable
+fun SmallPreviewItems(data: List<Models.WeatherPreviewItem>) {
+    LazyRow(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalAlignment = Alignment.Bottom
+    ) {
+        // items
+        items(data.size) { index ->
+            ShowSmallPreviewItem(
+                day = stringResource(data[index].day),
+                temperature = data[index].temperature,
+                weatherEvent = data[index].weather
+            )
+        }
+    }
+}
+
+@Composable
+fun ShowSmallPreviewItem(day: String, temperature: Int, weatherEvent: String) {
+    val rotation = rememberInfiniteTransition()
+    val rotate = rotation.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(3000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+    Column(
+        modifier = Modifier
+            .width(150.dp)
+            .height(250.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        when (weatherEvent) {
+            Constants.SNOWY -> {
+                Image(
+                    painterResource(id = R.drawable.snowflake1),
+                    contentDescription = stringResource(id = R.string.cd_snowy),
+                    modifier = Modifier
+                        .size(50.dp)
+                        .rotate(rotate.value),
+                    colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
+                )
+            }
+            Constants.RAINY -> {
+                Image(
+                    painterResource(id = R.drawable.rain_cloud),
+                    contentDescription = stringResource(id = R.string.cd_snowy),
+                    modifier = Modifier.size(50.dp),
+                    colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
+                )
+            }
+            Constants.SUNNY -> {
+                Image(
+                    painterResource(id = R.drawable.sun),
+                    contentDescription = stringResource(id = R.string.cd_snowy),
+                    modifier = Modifier
+                        .size(50.dp)
+                        .rotate(rotate.value)
+                )
+            }
+        }
+        Text(
+            text = day,
+            style = TextStyle(
+                color = MaterialTheme.colors.onBackground,
+                fontSize = 16.sp,
+                fontFamily = bodyFont
+            ),
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp)
+        )
+        Text(
+            text = stringResource(
+                id = R.string.txt_degrees, temperature
+            ),
+            textAlign = TextAlign.Center,
+            style = TextStyle(
+                color = MaterialTheme.colors.onBackground,
+                fontSize = 14.sp,
+                fontFamily = italicFont
+            ),
+            modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp)
+        )
+    }
 }
 
 @ExperimentalFoundationApi
