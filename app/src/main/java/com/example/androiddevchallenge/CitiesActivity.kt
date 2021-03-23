@@ -198,9 +198,7 @@ private fun ShowWeatherAnimation(
 fun CityWeatherDetail(data: Models.CityItem, currentCity: MutableState<Int>) {
     Column {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.7f)
+            modifier = Modifier.fillMaxSize()
                 .background(color = MaterialTheme.colors.background)
         ) {
             Image(
@@ -214,7 +212,7 @@ fun CityWeatherDetail(data: Models.CityItem, currentCity: MutableState<Int>) {
             )
             Column(
                 modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = if (data.primaryWeatherEvent is WeatherEvent.Snow) Alignment.CenterHorizontally else Alignment.End
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 ShowWeatherAnimation(primaryWeatherEvent = data.primaryWeatherEvent)
                 Text(
@@ -224,18 +222,19 @@ fun CityWeatherDetail(data: Models.CityItem, currentCity: MutableState<Int>) {
                     textAlign = TextAlign.Center,
                     style = TextStyle(
                         color = MaterialTheme.colors.onBackground,
-                        fontSize = 40.sp,
+                        fontSize = 24.sp,
                         fontFamily = headerFont
                     ),
                     modifier = Modifier
-                        .padding(start = 16.dp, top = 48.dp, end = 16.dp)
+                        .padding(start = 16.dp, end = 16.dp)
+                        .offset(x = 0.dp, y = (-16).dp)
                         .fillMaxWidth()
                 )
                 Text(
                     text = data.name,
                     style = TextStyle(
                         color = MaterialTheme.colors.onBackground,
-                        fontSize = 24.sp,
+                        fontSize = 20.sp,
                         fontFamily = headerFont
                     ),
                     textAlign = TextAlign.Center,
@@ -247,7 +246,7 @@ fun CityWeatherDetail(data: Models.CityItem, currentCity: MutableState<Int>) {
                     text = data.country,
                     style = TextStyle(
                         color = MaterialTheme.colors.onBackground,
-                        fontSize = 22.sp,
+                        fontSize = 18.sp,
                         fontFamily = bodyFont
                     ),
                     textAlign = TextAlign.Center,
@@ -259,7 +258,7 @@ fun CityWeatherDetail(data: Models.CityItem, currentCity: MutableState<Int>) {
                     text = data.getForecastFromWeatherEvents(),
                     style = TextStyle(
                         color = MaterialTheme.colors.onBackground,
-                        fontSize = 20.sp,
+                        fontSize = 16.sp,
                         fontFamily = italicFont
                     ),
                     textAlign = TextAlign.Center,
@@ -267,6 +266,13 @@ fun CityWeatherDetail(data: Models.CityItem, currentCity: MutableState<Int>) {
                         .padding(start = 16.dp, bottom = 16.dp, end = 16.dp)
                         .fillMaxWidth()
                 )
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Image(
+                        painterResource(id = data.map),
+                        contentDescription = stringResource(id = R.string.cd_map),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
         }
     }
@@ -276,16 +282,25 @@ fun CityWeatherDetail(data: Models.CityItem, currentCity: MutableState<Int>) {
 private fun ShowOvercast() {
     Box {
         ShowSun()
-        Cloud()
+        Cloud(alignMiddle = true)
     }
 }
 
 @Composable
-private fun ShowSun() {
+private fun ShowSun(rotate: Boolean = true) {
+    val rotateTransition = rememberInfiniteTransition()
+    val rotation = rotateTransition.animateFloat(
+        initialValue = 0f, targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(3000, easing = FastOutLinearInEasing),
+            repeatMode = RepeatMode.Restart
+        )
+    )
+
     val offsetTransition = rememberInfiniteTransition()
     val offset = offsetTransition.animateFloat(
         initialValue = 0f,
-        targetValue = 180f,
+        targetValue = 360f,
         animationSpec = infiniteRepeatable(
             animation = tween(3000, easing = FastOutLinearInEasing),
             repeatMode = RepeatMode.Restart
@@ -299,8 +314,10 @@ private fun ShowSun() {
             .padding(16.dp)
             .size(width = 140.dp, height = 140.dp)
             .offset(
-                x = -offset.value.dp, y = 0.dp
+                x = if (!rotate) -offset.value.dp else 0.dp,
+                y = 0.dp
             )
+            .rotate(if (rotate) rotation.value else 0f)
     )
 }
 
@@ -309,7 +326,7 @@ private fun ShowSnow() {
     val infiniteTransition = rememberInfiniteTransition()
     val tx = infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = 300f,
+        targetValue = 200f,
         animationSpec = infiniteRepeatable(
             animation = tween(5000, easing = FastOutLinearInEasing),
             repeatMode = RepeatMode.Restart
@@ -330,7 +347,7 @@ private fun ShowSnow() {
             painter = painterResource(id = R.drawable.snowflake1),
             contentDescription = "",
             modifier = Modifier
-                .padding(top = 16.dp, end = 16.dp)
+                .padding(top = 16.dp, end = 16.dp, bottom = 48.dp)
                 .offset(x = 1.dp, y = (tx.value + 1).dp)
                 .rotate(rotate.value),
             colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
@@ -339,7 +356,7 @@ private fun ShowSnow() {
             painter = painterResource(id = R.drawable.snowflake2),
             contentDescription = "",
             modifier = Modifier
-                .padding(top = 16.dp, end = 16.dp)
+                .padding(top = 16.dp, end = 16.dp, bottom = 48.dp)
                 .offset(x = 0.dp, y = (tx.value + 3).dp)
                 .rotate(rotate.value),
             colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
@@ -348,7 +365,7 @@ private fun ShowSnow() {
             painter = painterResource(id = R.drawable.snowflake3),
             contentDescription = "",
             modifier = Modifier
-                .padding(top = 16.dp, end = 16.dp)
+                .padding(top = 16.dp, end = 16.dp, bottom = 48.dp)
                 .offset(x = -3.dp, y = tx.value.dp)
                 .rotate(rotate.value),
             colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
@@ -357,7 +374,7 @@ private fun ShowSnow() {
             painter = painterResource(id = R.drawable.snowflake4),
             contentDescription = "",
             modifier = Modifier
-                .padding(top = 16.dp, end = 16.dp)
+                .padding(top = 16.dp, end = 16.dp, bottom = 48.dp)
                 .offset(x = 2.dp, y = (tx.value + 5).dp)
                 .rotate(rotate.value),
             colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
@@ -366,7 +383,7 @@ private fun ShowSnow() {
             painter = painterResource(id = R.drawable.snowflake1),
             contentDescription = "",
             modifier = Modifier
-                .padding(top = 16.dp, end = 16.dp)
+                .padding(top = 16.dp, end = 16.dp, bottom = 48.dp)
                 .offset(x = -2.dp, y = (tx.value + 1).dp)
                 .rotate(rotate.value),
             colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
@@ -375,7 +392,7 @@ private fun ShowSnow() {
             painter = painterResource(id = R.drawable.snowflake2),
             contentDescription = "",
             modifier = Modifier
-                .padding(top = 16.dp, end = 16.dp)
+                .padding(top = 16.dp, end = 16.dp, bottom = 48.dp)
                 .offset(x = 0.dp, y = (tx.value + 3).dp)
                 .rotate(rotate.value),
             colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
@@ -384,7 +401,7 @@ private fun ShowSnow() {
             painter = painterResource(id = R.drawable.snowflake3),
             contentDescription = "",
             modifier = Modifier
-                .padding(top = 16.dp, end = 16.dp)
+                .padding(top = 16.dp, end = 16.dp, bottom = 48.dp)
                 .offset(x = -1.dp, y = tx.value.dp)
                 .rotate(rotate.value),
             colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
@@ -393,7 +410,7 @@ private fun ShowSnow() {
             painter = painterResource(id = R.drawable.snowflake4),
             contentDescription = "",
             modifier = Modifier
-                .padding(top = 16.dp, end = 16.dp)
+                .padding(top = 16.dp, end = 16.dp, bottom = 48.dp)
                 .offset(x = 1.dp, y = (tx.value + 5).dp)
                 .rotate(rotate.value),
             colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
@@ -402,7 +419,7 @@ private fun ShowSnow() {
             painter = painterResource(id = R.drawable.snowflake1),
             contentDescription = "",
             modifier = Modifier
-                .padding(top = 16.dp, end = 16.dp)
+                .padding(top = 16.dp, end = 16.dp, bottom = 48.dp)
                 .offset(x = 1.dp, y = (tx.value + 1).dp)
                 .rotate(rotate.value),
             colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
@@ -417,7 +434,7 @@ private fun ShowRain() {
 }
 
 @Composable
-private fun Cloud() {
+private fun Cloud(alignMiddle: Boolean = false) {
     val infiniteTransition = rememberInfiniteTransition()
     val tx = infiniteTransition.animateFloat(
         initialValue = 0f,

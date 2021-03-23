@@ -17,4 +17,5 @@
     <string name="cd_btn_right">Right</string>
     <string name="txt_degrees">%1$d°C</string>
     <string name="txt_close">Close</string>
+    <string name="cd_map">City map</string>
 </resources>
