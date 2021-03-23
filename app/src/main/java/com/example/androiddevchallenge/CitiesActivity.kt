@@ -15,10 +15,10 @@
  */
 package com.example.androiddevchallenge
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -108,7 +108,7 @@ fun ShowCities(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(start = 16.dp, end = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Cities(data = data, currentCity = currentCity)
@@ -123,8 +123,7 @@ private fun Cities(
 ) {
     LazyVerticalGrid(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp, bottom = 16.dp),
+            .fillMaxWidth(),
         cells = GridCells.Adaptive(minSize = 128.dp)
     ) {
         // items
