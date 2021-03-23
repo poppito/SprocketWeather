@@ -287,7 +287,7 @@ fun CityWeatherDetail(data: Models.CityItem, currentCity: MutableState<Int>) {
 private fun ShowOvercast() {
     Box {
         ShowSun()
-        Cloud(alignMiddle = true)
+        Cloud()
     }
 }
 
