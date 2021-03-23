@@ -15,6 +15,7 @@
  */
 package com.example.androiddevchallenge
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
@@ -28,8 +29,9 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
+    @ExperimentalFoundationApi
     @get:Rule
-    val composeTestRule = createAndroidComposeRule<CityWeatherActivity>()
+    val composeTestRule = createAndroidComposeRule<CitiesActivity>()
 
     @Test
     fun sampleTest() {

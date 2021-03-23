@@ -43,12 +43,12 @@ val typography = Typography(
     h1 = TextStyle(
         fontFamily = headerFont,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 24.sp
+        fontSize = 20.sp
     ),
     h2 = TextStyle(
         fontFamily = headerFont,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 22.sp
+        fontSize = 18.sp
     ),
     caption = TextStyle(
         fontFamily = italicFont,

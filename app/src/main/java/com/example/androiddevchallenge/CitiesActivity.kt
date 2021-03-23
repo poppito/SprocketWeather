@@ -18,6 +18,7 @@ package com.example.androiddevchallenge
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -25,6 +26,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,7 +34,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,9 +41,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -50,13 +50,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -65,7 +63,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import com.example.androiddevchallenge.Constants.Companion.ROTATION_ANGLE
 import com.example.androiddevchallenge.model.Models
 import com.example.androiddevchallenge.model.WeatherEvent
 import com.example.androiddevchallenge.model.cityItems
@@ -75,8 +72,8 @@ import com.example.androiddevchallenge.ui.theme.headerFont
 import com.example.androiddevchallenge.ui.theme.italicFont
 import extensions.capitalCase
 import extensions.getForecastFromWeatherEvents
-import kotlinx.coroutines.launch
 
+@ExperimentalFoundationApi
 class CitiesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,223 +85,93 @@ class CitiesActivity : AppCompatActivity() {
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun AddLayoutElements(data: List<Models.CityItem>) {
     Surface(color = MaterialTheme.colors.background) {
-        val selection = remember { mutableStateOf(0) }
         val currentCity = remember { mutableStateOf(-1) }
 
         if (currentCity.value == -1) {
-            ShowCities(selection, data = data, currentCity = currentCity)
+            ShowCities(currentCity, data = data)
         } else {
             CityWeatherDetail(data = data[currentCity.value], currentCity)
         }
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun ShowCities(
-    selection: MutableState<Int>,
-    data: List<Models.CityItem>,
-    currentCity: MutableState<Int>
+    currentCity: MutableState<Int>,
+    data: List<Models.CityItem>
 ) {
-    val listState = rememberLazyListState()
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Cities(data = data, state = listState, selection = selection)
-        Spacer(modifier = Modifier.fillMaxSize(0.2f))
-        Sprocket(
-            listState = listState,
-            selection = selection,
-            currentCity = currentCity
-        )
+        Cities(data = data, currentCity = currentCity)
     }
 }
 
-@Composable
-private fun Sprocket(
-    listState: LazyListState,
-    selection: MutableState<Int>,
-    currentCity: MutableState<Int>
-) {
-    val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
-    val rotation = remember { mutableStateOf(0f) }
-    Row(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxSize(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.btn_left),
-            contentDescription = stringResource(
-                id = R.string.cd_btn_left
-            ),
-            modifier = Modifier
-                .clickable {
-                    if (selection.value > 0) {
-                        selection.value = selection.value - 1
-                        rotation.value = rotation.value - ROTATION_ANGLE
-                    }
-                    coroutineScope.launch {
-                        listState.scrollToItem(
-                            index = selection.value
-                        )
-                    }
-                }
-                .padding(8.dp)
-        )
-        Image(
-            painter = painterResource(id = R.drawable.sprocket),
-            contentDescription = stringResource(id = R.string.cd_sprocket),
-            modifier = Modifier
-                .rotate(rotation.value)
-                .padding(16.dp)
-                .clickable(
-                    onClick = {
-                        currentCity.value = selection.value
-                    }
-                )
-        )
-        Image(
-            painter = painterResource(id = R.drawable.btn_right),
-            contentDescription = stringResource(
-                id = R.string.cd_btn_right
-            ),
-            modifier = Modifier
-                .clickable {
-                    if (selection.value < cityItems.size - 1) {
-                        selection.value = selection.value + 1
-                        rotation.value = rotation.value + ROTATION_ANGLE
-                    }
-                    coroutineScope.launch {
-                        listState.animateScrollToItem(
-                            index = selection.value
-                        )
-                    }
-                }
-                .padding(8.dp)
-        )
-    }
-}
-
+@ExperimentalFoundationApi
 @Composable
 private fun Cities(
     data: List<Models.CityItem>,
-    state: LazyListState,
-    selection: MutableState<Int>
+    currentCity: MutableState<Int>
 ) {
-    LazyRow(
+    LazyVerticalGrid(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 16.dp, bottom = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-        state = state
+        cells = GridCells.Adaptive(minSize = 128.dp)
     ) {
         // items
         items(data.size) { index ->
-            City(data = data[index], selected = selection.value == index)
+            City(city = data[index], currentCity = currentCity, index = index)
         }
     }
 }
 
 @Composable
-private fun City(data: Models.CityItem, selected: Boolean = false) {
-    val context = LocalContext.current
+private fun City(city: Models.CityItem, currentCity: MutableState<Int>, index: Int) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.4f)
-            .padding(16.dp),
+        Modifier
+            .padding(16.dp)
+            .fillMaxSize()
+            .fillMaxHeight()
+            .clickable { currentCity.value = index },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        if (selected) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = MaterialTheme.colors.primaryVariant)
-            ) {
-                Column(
-                    Modifier
-                        .padding(16.dp)
-                        .fillMaxSize()
-                        .fillMaxHeight(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        painter = painterResource(id = data.img),
-                        contentDescription = stringResource(id = R.string.cd_city_img, data.name),
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .height(100.dp)
-                            .zIndex(1f)
-                    )
-                    Text(
-                        text = data.name.capitalCase(),
-                        modifier = Modifier
-                            .padding(top = 8.dp)
-                            .fillMaxWidth()
-                            .zIndex(1f),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.h1
-                    )
-                    Text(
-                        text = data.country.capitalCase(),
-                        modifier = Modifier
-                            .padding(top = 8.dp)
-                            .fillMaxWidth()
-                            .zIndex(1f),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.h2
-                    )
-                }
-            }
-        } else {
-            Column(
-                Modifier
-                    .padding(16.dp)
-                    .fillMaxSize()
-                    .fillMaxHeight(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    painter = painterResource(id = data.img),
-                    contentDescription = stringResource(id = R.string.cd_city_img, data.name),
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .fillMaxWidth(0.8f)
-                        .height(150.dp)
-                        .zIndex(1f)
-                )
-                Text(
-                    text = data.name.capitalCase(),
-                    modifier = Modifier
-                        .padding(top = 8.dp)
-                        .fillMaxWidth()
-                        .zIndex(1f),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.h1
-                )
-                Text(
-                    text = data.country.capitalCase(),
-                    modifier = Modifier
-                        .padding(top = 8.dp)
-                        .fillMaxWidth()
-                        .zIndex(1f),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.h2
-                )
-            }
-        }
+        Image(
+            painter = painterResource(id = city.img),
+            contentDescription = stringResource(id = R.string.cd_city_img, city.name),
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .height(150.dp)
+                .zIndex(1f)
+        )
+        Text(
+            text = city.name.capitalCase(),
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .fillMaxWidth()
+                .zIndex(1f),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.h1
+        )
+        Text(
+            text = city.country.capitalCase(),
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .fillMaxWidth()
+                .zIndex(1f),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.h2
+        )
     }
 }
 
@@ -321,18 +188,10 @@ private fun ShowWeatherAnimation(
             }
         }
         is WeatherEvent.Rain -> {
-            if (primaryWeatherEvent.level > 1) {
-                ShowRain()
-            } else {
-                // RainAndSun()
-            }
+            ShowRain()
         }
         is WeatherEvent.Snow -> {
-            if (primaryWeatherEvent.level > 1) {
-                ShowSnow()
-            } else {
-                // SunAndSnow()
-            }
+            ShowSnow()
         }
     }
 }
@@ -601,6 +460,7 @@ private fun Rain() {
     )
 }
 
+@ExperimentalFoundationApi
 @Preview("Light Theme", widthDp = 360, heightDp = 640)
 @Composable
 fun LightPreview() {
@@ -609,6 +469,7 @@ fun LightPreview() {
     }
 }
 
+@ExperimentalFoundationApi
 @Preview("Dark Theme", widthDp = 360, heightDp = 640)
 @Composable
 fun DarkPreview() {
