@@ -25,17 +25,16 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -59,6 +58,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -73,13 +73,14 @@ import com.example.androiddevchallenge.model.WeatherEvent
 import com.example.androiddevchallenge.model.cityItems
 import com.example.androiddevchallenge.ui.theme.MyTheme
 import com.example.androiddevchallenge.ui.theme.bodyFont
+import com.example.androiddevchallenge.ui.theme.darkTransparent
 import com.example.androiddevchallenge.ui.theme.headerFont
 import com.example.androiddevchallenge.ui.theme.italicFont
-import com.example.androiddevchallenge.ui.theme.windColor
 import com.example.androiddevchallenge.ui.theme.lightTransparent
-import com.example.androiddevchallenge.ui.theme.darkTransparent
+import com.example.androiddevchallenge.ui.theme.windColor
 import extensions.capitalCase
 import extensions.getForecastFromWeatherEvents
+import extensions.toFahrenheit
 
 @ExperimentalFoundationApi
 class CitiesActivity : AppCompatActivity() {
@@ -132,7 +133,7 @@ private fun Cities(
     LazyVerticalGrid(
         modifier = Modifier
             .fillMaxWidth(),
-        cells = GridCells.Adaptive(minSize = 100.dp)
+        cells = GridCells.Adaptive(minSize = 140.dp)
     ) {
         // items
         items(data.size) { index ->
@@ -225,7 +226,7 @@ fun CityWeatherDetail(data: Models.CityItem, currentCity: MutableState<Int>) {
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             Column(
-                modifier = Modifier.fillMaxHeight(0.3f),
+                modifier = Modifier.fillMaxHeight(0.15f),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 ShowWeatherAnimation(primaryWeatherEvent = data.primaryWeatherEvent)
@@ -291,6 +292,10 @@ private fun ShowOvercast() {
 
 @Composable
 private fun Radar(data: Models.CityItem) {
+    var fullWidth = 0f
+    var fullHeight = 0f
+    val padding = 4.dp.value
+
     val rotateTransition = rememberInfiniteTransition()
     val rotation = rotateTransition.animateFloat(
         initialValue = 0f, targetValue = 360f,
@@ -302,13 +307,14 @@ private fun Radar(data: Models.CityItem) {
 
     val offsetTransition = rememberInfiniteTransition()
     val offset = offsetTransition.animateFloat(
-        initialValue = 16.dp.value,
-        targetValue = 800f,
+        initialValue = 0f,
+        targetValue = fullHeight,
         animationSpec = infiniteRepeatable(
             animation = tween(3000, easing = FastOutLinearInEasing),
             repeatMode = RepeatMode.Restart
         )
     )
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -326,15 +332,17 @@ private fun Radar(data: Models.CityItem) {
                 contentDescription = stringResource(id = R.string.cd_map),
                 modifier = Modifier.fillMaxSize()
             )
-            Canvas(modifier = Modifier.fillMaxSize(), onDraw = {
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                fullWidth = size.width
+                fullHeight = size.height
                 drawLine(
                     color = windColor,
                     strokeWidth = 4.dp.value,
                     start = Offset(x = 8.dp.value, y = 8.dp.value),
-                    end = Offset(x = 120.dp.value, y = 120.dp.value),
+                    end = Offset(x = offset.value, y = offset.value),
                     pathEffect = PathEffect.cornerPathEffect(radius = 8.dp.value)
                 )
-            })
+            }
         }
     }
 }
@@ -343,7 +351,7 @@ private fun Radar(data: Models.CityItem) {
 private fun WeatherText(data: Models.CityItem) {
     Text(
         text = stringResource(
-            id = R.string.txt_degrees, data.foreCast
+            id = R.string.txt_degrees, data.foreCast, data.foreCast.toFahrenheit()
         ),
         textAlign = TextAlign.Center,
         style = TextStyle(
@@ -353,9 +361,15 @@ private fun WeatherText(data: Models.CityItem) {
         ),
         modifier = Modifier
             .padding(start = 16.dp, end = 16.dp)
-            .offset(x = 0.dp, y = (-16).dp)
             .fillMaxWidth()
     )
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        HumidityAndWind(humidity = data.humidity, wind = data.wind)
+    }
     Text(
         text = data.name,
         style = TextStyle(
@@ -395,7 +409,57 @@ private fun WeatherText(data: Models.CityItem) {
 }
 
 @Composable
-private fun ShowSun(rotate: Boolean = true) {
+private fun HumidityAndWind(humidity: Int, wind: Int) {
+    Row(
+        modifier = Modifier
+            .padding(top = 4.dp, bottom = 4.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painterResource(id = R.drawable.ic_humidity_small),
+            contentDescription = stringResource(
+                id = R.string.cd_humidity
+            ),
+            colorFilter = ColorFilter.tint(
+                color = MaterialTheme.colors.onBackground
+            ),
+            modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp)
+                .size(24.dp)
+        )
+        Text(
+            stringResource(id = R.string.txt_percentage, humidity),
+            modifier = Modifier.padding(end = 16.dp),
+            textAlign = TextAlign.Start
+        )
+    }
+    Row(
+        modifier = Modifier
+            .padding(top = 4.dp, bottom = 4.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painterResource(id = R.drawable.ic_wind_small),
+            contentDescription = stringResource(
+                id = R.string.cd_wind
+            ),
+            colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground),
+            modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp)
+                .size(24.dp)
+        )
+        Text(
+            stringResource(id = R.string.txt_kph, wind),
+            modifier = Modifier.padding(end = 16.dp),
+            textAlign = TextAlign.Start
+        )
+    }
+}
+
+@Composable
+private fun ShowSun() {
     val rotateTransition = rememberInfiniteTransition()
     val rotation = rotateTransition.animateFloat(
         initialValue = 0f, targetValue = 360f,
@@ -405,27 +469,12 @@ private fun ShowSun(rotate: Boolean = true) {
         )
     )
 
-    val offsetTransition = rememberInfiniteTransition()
-    val offset = offsetTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(3000, easing = FastOutLinearInEasing),
-            repeatMode = RepeatMode.Restart
-        )
-    )
-
     Image(
         painter = painterResource(id = R.drawable.sun),
         contentDescription = "",
         modifier = Modifier
             .padding(16.dp)
-            .size(width = 140.dp, height = 140.dp)
-            .offset(
-                x = if (!rotate) -offset.value.dp else 0.dp,
-                y = 0.dp
-            )
-            .rotate(if (rotate) rotation.value else 0f)
+            .rotate(rotation.value)
     )
 }
 
@@ -520,7 +569,7 @@ private fun Cloud() {
         painter = painterResource(id = R.drawable.cloud),
         contentDescription = stringResource(id = R.string.cd_overcast),
         modifier = Modifier
-            .padding(top = 24.dp, end = 16.dp),
+            .padding(top = 24.dp),
         colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
     )
 }
@@ -559,14 +608,22 @@ fun SmallPreviewItems(data: List<Models.WeatherPreviewItem>) {
             ShowSmallPreviewItem(
                 day = stringResource(data[index].day),
                 temperature = data[index].temperature,
-                weatherEvent = data[index].weather
+                weatherEvent = data[index].weather,
+                humidity = data[index].humidity,
+                wind = data[index].wind
             )
         }
     }
 }
 
 @Composable
-fun ShowSmallPreviewItem(day: String, temperature: Int, weatherEvent: String) {
+fun ShowSmallPreviewItem(
+    day: String,
+    temperature: Int,
+    weatherEvent: String,
+    humidity: Int,
+    wind: Int
+) {
     val rotation = rememberInfiniteTransition()
     val rotate = rotation.animateFloat(
         initialValue = 0f,
@@ -578,7 +635,7 @@ fun ShowSmallPreviewItem(day: String, temperature: Int, weatherEvent: String) {
     )
     Column(
         modifier = Modifier
-            .width(150.dp)
+            .width(180.dp)
             .height(250.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -635,7 +692,7 @@ fun ShowSmallPreviewItem(day: String, temperature: Int, weatherEvent: String) {
         )
         Text(
             text = stringResource(
-                id = R.string.txt_degrees, temperature
+                id = R.string.txt_degrees, temperature, temperature.toFahrenheit()
             ),
             textAlign = TextAlign.Center,
             style = TextStyle(
@@ -646,6 +703,7 @@ fun ShowSmallPreviewItem(day: String, temperature: Int, weatherEvent: String) {
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp)
         )
+        HumidityAndWind(humidity = humidity, wind = wind)
     }
 }
 

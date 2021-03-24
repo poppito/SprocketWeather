@@ -29,13 +29,17 @@ class Models {
         val foreCast: Int,
         val primaryWeatherEvent: WeatherEvent,
         val map: Int,
-        val weatherPreviews: List<WeatherPreviewItem>
+        val weatherPreviews: List<WeatherPreviewItem>,
+        val humidity: Int,
+        val wind: Int
     )
 
     data class WeatherPreviewItem(
         val temperature: Int,
         val day: Int,
-        val weather: String
+        val weather: String,
+        val humidity: Int,
+        val wind: Int
     )
 }
 
@@ -54,12 +58,44 @@ val cityItems = listOf<Models.CityItem>(
         primaryWeatherEvent = WeatherEvent.Sun(level = 2),
         map = R.drawable.sydney_map,
         weatherPreviews = listOf(
-            Models.WeatherPreviewItem(32, day = R.string.txt_tomorrow, weather = SUNNY),
-            Models.WeatherPreviewItem(27, day = R.string.txt_wednesday, weather = RAINY),
-            Models.WeatherPreviewItem(32, day = R.string.txt_thursday, weather = SUNNY),
-            Models.WeatherPreviewItem(32, day = R.string.txt_friday, weather = RAINY),
-            Models.WeatherPreviewItem(32, day = R.string.txt_saturday, weather = SUNNY),
-        )
+            Models.WeatherPreviewItem(
+                32,
+                day = R.string.txt_tomorrow,
+                weather = SUNNY,
+                humidity = 30,
+                wind = 11
+            ),
+            Models.WeatherPreviewItem(
+                27,
+                day = R.string.txt_wednesday,
+                weather = RAINY,
+                humidity = 30,
+                wind = 23
+            ),
+            Models.WeatherPreviewItem(
+                32,
+                day = R.string.txt_thursday,
+                weather = SUNNY,
+                humidity = 30,
+                wind = 16
+            ),
+            Models.WeatherPreviewItem(
+                32,
+                day = R.string.txt_friday,
+                weather = RAINY,
+                humidity = 35,
+                wind = 20
+            ),
+            Models.WeatherPreviewItem(
+                32,
+                day = R.string.txt_saturday,
+                weather = SUNNY,
+                humidity = 30,
+                wind = 16
+            ),
+        ),
+        humidity = 20,
+        wind = 19
     ),
     Models.CityItem(
         name = "New York",
@@ -69,12 +105,32 @@ val cityItems = listOf<Models.CityItem>(
         primaryWeatherEvent = WeatherEvent.Snow(level = 2),
         map = R.drawable.ny_map,
         weatherPreviews = listOf(
-            Models.WeatherPreviewItem(-1, day = R.string.txt_tomorrow, weather = SNOWY),
-            Models.WeatherPreviewItem(1, day = R.string.txt_wednesday, weather = SNOWY),
-            Models.WeatherPreviewItem(11, day = R.string.txt_thursday, weather = SUNNY),
-            Models.WeatherPreviewItem(16, day = R.string.txt_friday, weather = SUNNY),
-            Models.WeatherPreviewItem(14, day = R.string.txt_saturday, weather = SUNNY),
-        )
+            Models.WeatherPreviewItem(
+                -1, day = R.string.txt_tomorrow, weather = SNOWY, humidity = 3,
+                wind = 11
+            ),
+            Models.WeatherPreviewItem(
+                1, day = R.string.txt_wednesday, weather = SNOWY, humidity = 2,
+                wind = 13
+            ),
+            Models.WeatherPreviewItem(
+                11, day = R.string.txt_thursday, weather = SUNNY, humidity = 12,
+                wind = 13
+            ),
+            Models.WeatherPreviewItem(
+                16,
+                day = R.string.txt_friday,
+                weather = SUNNY,
+                humidity = 14,
+                wind = 12
+            ),
+            Models.WeatherPreviewItem(
+                11, day = R.string.txt_saturday, weather = SUNNY, humidity = 14,
+                wind = 12
+            ),
+        ),
+        humidity = 10,
+        wind = 13
     ),
     Models.CityItem(
         name = "Tokyo",
@@ -84,12 +140,29 @@ val cityItems = listOf<Models.CityItem>(
         primaryWeatherEvent = WeatherEvent.Rain(level = 2),
         map = R.drawable.tokyo_map,
         weatherPreviews = listOf(
-            Models.WeatherPreviewItem(27, day = R.string.txt_tomorrow, weather = RAINY),
-            Models.WeatherPreviewItem(26, day = R.string.txt_wednesday, weather = SUNNY),
-            Models.WeatherPreviewItem(30, day = R.string.txt_thursday, weather = RAINY),
-            Models.WeatherPreviewItem(25, day = R.string.txt_friday, weather = OVERCAST),
-            Models.WeatherPreviewItem(23, day = R.string.txt_saturday, weather = OVERCAST),
-        )
+            Models.WeatherPreviewItem(
+                27, day = R.string.txt_tomorrow, weather = RAINY, humidity = 22,
+                wind = 11
+            ),
+            Models.WeatherPreviewItem(
+                26, day = R.string.txt_wednesday, weather = SUNNY, humidity = 14,
+                wind = 12
+            ),
+            Models.WeatherPreviewItem(
+                30, day = R.string.txt_thursday, weather = RAINY, humidity = 13,
+                wind = 11
+            ),
+            Models.WeatherPreviewItem(
+                25, day = R.string.txt_friday, weather = OVERCAST, humidity = 11,
+                wind = 12
+            ),
+            Models.WeatherPreviewItem(
+                23, day = R.string.txt_saturday, weather = OVERCAST, humidity = 13,
+                wind = 19
+            ),
+        ),
+        humidity = 10,
+        wind = 15
     ),
     Models.CityItem(
         name = "Barcelona",
@@ -99,12 +172,31 @@ val cityItems = listOf<Models.CityItem>(
         primaryWeatherEvent = WeatherEvent.Sun(level = 2),
         map = R.drawable.barcelona_map,
         weatherPreviews = listOf(
-            Models.WeatherPreviewItem(30, day = R.string.txt_tomorrow, weather = SUNNY),
-            Models.WeatherPreviewItem(32, day = R.string.txt_wednesday, weather = SUNNY),
-            Models.WeatherPreviewItem(30, day = R.string.txt_thursday, weather = RAINY),
-            Models.WeatherPreviewItem(24, day = R.string.txt_friday, weather = RAINY),
-            Models.WeatherPreviewItem(27, day = R.string.txt_saturday, weather = OVERCAST),
-        )
+            Models.WeatherPreviewItem(
+                30, day = R.string.txt_tomorrow, weather = SUNNY, humidity = 13,
+                wind = 19
+            ),
+            Models.WeatherPreviewItem(
+                32, day = R.string.txt_wednesday, weather = SUNNY,
+                humidity = 22,
+                wind = 12
+            ),
+            Models.WeatherPreviewItem(
+                30, day = R.string.txt_thursday, weather = RAINY,
+                humidity = 16,
+                wind = 11
+            ),
+            Models.WeatherPreviewItem(
+                24, day = R.string.txt_friday, weather = RAINY, humidity = 11,
+                wind = 22
+            ),
+            Models.WeatherPreviewItem(
+                27, day = R.string.txt_saturday, weather = OVERCAST,
+                humidity = 29, wind = 11
+            ),
+        ),
+        humidity = 1,
+        wind = 10
     ),
     Models.CityItem(
         name = "Berlin",
@@ -114,12 +206,32 @@ val cityItems = listOf<Models.CityItem>(
         primaryWeatherEvent = WeatherEvent.Snow(level = 2),
         map = R.drawable.berlin_map,
         weatherPreviews = listOf(
-            Models.WeatherPreviewItem(1, day = R.string.txt_tomorrow, weather = SNOWY),
-            Models.WeatherPreviewItem(2, day = R.string.txt_wednesday, weather = SNOWY),
-            Models.WeatherPreviewItem(10, day = R.string.txt_thursday, weather = SUNNY),
-            Models.WeatherPreviewItem(7, day = R.string.txt_friday, weather = SUNNY),
-            Models.WeatherPreviewItem(11, day = R.string.txt_saturday, weather = SUNNY),
-        )
+            Models.WeatherPreviewItem(
+                1,
+                day = R.string.txt_tomorrow,
+                weather = SNOWY,
+                humidity = 11,
+                wind = 5
+            ),
+            Models.WeatherPreviewItem(
+                2, day = R.string.txt_wednesday, weather = SNOWY,
+                humidity = 11, wind = 1
+            ),
+            Models.WeatherPreviewItem(
+                10, day = R.string.txt_thursday, weather = SUNNY,
+                humidity = 11, wind = 21
+            ),
+            Models.WeatherPreviewItem(
+                7, day = R.string.txt_friday, weather = SUNNY,
+                humidity = 13, wind = 19
+            ),
+            Models.WeatherPreviewItem(
+                11, day = R.string.txt_saturday, weather = SUNNY,
+                humidity = 14, wind = 11
+            ),
+        ),
+        humidity = 6,
+        wind = 11
     ),
     Models.CityItem(
         name = "London",
@@ -129,12 +241,36 @@ val cityItems = listOf<Models.CityItem>(
         primaryWeatherEvent = WeatherEvent.Rain(level = 2),
         map = R.drawable.london_map,
         weatherPreviews = listOf(
-            Models.WeatherPreviewItem(17, day = R.string.txt_tomorrow, weather = OVERCAST),
-            Models.WeatherPreviewItem(17, day = R.string.txt_wednesday, weather = SUNNY),
-            Models.WeatherPreviewItem(20, day = R.string.txt_thursday, weather = RAINY),
-            Models.WeatherPreviewItem(19, day = R.string.txt_friday, weather = RAINY),
-            Models.WeatherPreviewItem(17, day = R.string.txt_saturday, weather = SUNNY),
-        )
+            Models.WeatherPreviewItem(
+                17,
+                day = R.string.txt_tomorrow,
+                weather = OVERCAST,
+                humidity = 14,
+                wind = 11
+            ),
+            Models.WeatherPreviewItem(
+                17, day = R.string.txt_wednesday, weather = SUNNY,
+                humidity = 13, wind = 19
+            ),
+            Models.WeatherPreviewItem(
+                20,
+                day = R.string.txt_thursday,
+                weather = RAINY,
+                humidity = 11,
+                wind = 1
+            ),
+            Models.WeatherPreviewItem(
+                19, day = R.string.txt_friday, weather = RAINY, humidity = 22,
+                wind = 12
+            ),
+            Models.WeatherPreviewItem(
+                17, day = R.string.txt_saturday, weather = SUNNY,
+                humidity = 11,
+                wind = 11
+            ),
+        ),
+        humidity = 11,
+        wind = 17
     ),
     Models.CityItem(
         name = "Hong Kong",
@@ -144,12 +280,44 @@ val cityItems = listOf<Models.CityItem>(
         primaryWeatherEvent = WeatherEvent.Rain(level = 2),
         map = R.drawable.hk_map,
         weatherPreviews = listOf(
-            Models.WeatherPreviewItem(28, day = R.string.txt_tomorrow, weather = SUNNY),
-            Models.WeatherPreviewItem(32, day = R.string.txt_wednesday, weather = OVERCAST),
-            Models.WeatherPreviewItem(33, day = R.string.txt_thursday, weather = RAINY),
-            Models.WeatherPreviewItem(33, day = R.string.txt_friday, weather = RAINY),
-            Models.WeatherPreviewItem(29, day = R.string.txt_saturday, weather = SUNNY),
-        )
+            Models.WeatherPreviewItem(
+                28,
+                day = R.string.txt_tomorrow,
+                weather = SUNNY,
+                humidity = 12,
+                wind = 9
+            ),
+            Models.WeatherPreviewItem(
+                32,
+                day = R.string.txt_wednesday,
+                weather = OVERCAST,
+                humidity = 29,
+                wind = 4
+            ),
+            Models.WeatherPreviewItem(
+                33,
+                day = R.string.txt_thursday,
+                weather = RAINY,
+                humidity = 20,
+                wind = 12
+            ),
+            Models.WeatherPreviewItem(
+                33,
+                day = R.string.txt_friday,
+                weather = RAINY,
+                humidity = 11,
+                wind = 11
+            ),
+            Models.WeatherPreviewItem(
+                29,
+                day = R.string.txt_saturday,
+                weather = SUNNY,
+                humidity = 10,
+                wind = 18
+            ),
+        ),
+        humidity = 11,
+        wind = 20
     ),
     Models.CityItem(
         name = "Athens",
@@ -159,12 +327,44 @@ val cityItems = listOf<Models.CityItem>(
         primaryWeatherEvent = WeatherEvent.Rain(level = 2),
         map = R.drawable.athens_map,
         weatherPreviews = listOf(
-            Models.WeatherPreviewItem(19, day = R.string.txt_tomorrow, weather = SUNNY),
-            Models.WeatherPreviewItem(19, day = R.string.txt_wednesday, weather = OVERCAST),
-            Models.WeatherPreviewItem(23, day = R.string.txt_thursday, weather = RAINY),
-            Models.WeatherPreviewItem(25, day = R.string.txt_friday, weather = SUNNY),
-            Models.WeatherPreviewItem(27, day = R.string.txt_saturday, weather = SUNNY),
-        )
+            Models.WeatherPreviewItem(
+                19,
+                day = R.string.txt_tomorrow,
+                weather = SUNNY,
+                humidity = 12,
+                wind = 20
+            ),
+            Models.WeatherPreviewItem(
+                19,
+                day = R.string.txt_wednesday,
+                weather = OVERCAST,
+                humidity = 11,
+                wind = 29
+            ),
+            Models.WeatherPreviewItem(
+                23,
+                day = R.string.txt_thursday,
+                weather = RAINY,
+                humidity = 19,
+                wind = 5
+            ),
+            Models.WeatherPreviewItem(
+                25,
+                day = R.string.txt_friday,
+                weather = SUNNY,
+                humidity = 1,
+                wind = 9
+            ),
+            Models.WeatherPreviewItem(
+                27,
+                day = R.string.txt_saturday,
+                weather = SUNNY,
+                humidity = 11,
+                wind = 9
+            ),
+        ),
+        humidity = 4,
+        wind = 1
     ),
     Models.CityItem(
         name = "Vienna",
@@ -174,12 +374,44 @@ val cityItems = listOf<Models.CityItem>(
         primaryWeatherEvent = WeatherEvent.Snow(level = 2),
         map = R.drawable.vienna_map,
         weatherPreviews = listOf(
-            Models.WeatherPreviewItem(3, day = R.string.txt_tomorrow, weather = SNOWY),
-            Models.WeatherPreviewItem(7, day = R.string.txt_wednesday, weather = SNOWY),
-            Models.WeatherPreviewItem(11, day = R.string.txt_thursday, weather = SUNNY),
-            Models.WeatherPreviewItem(16, day = R.string.txt_friday, weather = SUNNY),
-            Models.WeatherPreviewItem(14, day = R.string.txt_saturday, weather = OVERCAST),
-        )
+            Models.WeatherPreviewItem(
+                3,
+                day = R.string.txt_tomorrow,
+                weather = SNOWY,
+                humidity = 1,
+                wind = 7
+            ),
+            Models.WeatherPreviewItem(
+                7,
+                day = R.string.txt_wednesday,
+                weather = SNOWY,
+                humidity = 0,
+                wind = 1
+            ),
+            Models.WeatherPreviewItem(
+                11,
+                day = R.string.txt_thursday,
+                weather = SUNNY,
+                humidity = 9,
+                wind = 12
+            ),
+            Models.WeatherPreviewItem(
+                16,
+                day = R.string.txt_friday,
+                weather = SUNNY,
+                humidity = 1,
+                wind = 12
+            ),
+            Models.WeatherPreviewItem(
+                14,
+                day = R.string.txt_saturday,
+                weather = OVERCAST,
+                humidity = 12,
+                wind = 9
+            ),
+        ),
+        humidity = 13,
+        wind = 11
     ),
     Models.CityItem(
         name = "Paris",
@@ -189,12 +421,44 @@ val cityItems = listOf<Models.CityItem>(
         primaryWeatherEvent = WeatherEvent.Rain(level = 1),
         map = R.drawable.paris_map,
         weatherPreviews = listOf(
-            Models.WeatherPreviewItem(19, day = R.string.txt_tomorrow, weather = SUNNY),
-            Models.WeatherPreviewItem(19, day = R.string.txt_wednesday, weather = OVERCAST),
-            Models.WeatherPreviewItem(23, day = R.string.txt_thursday, weather = RAINY),
-            Models.WeatherPreviewItem(25, day = R.string.txt_friday, weather = OVERCAST),
-            Models.WeatherPreviewItem(27, day = R.string.txt_saturday, weather = SUNNY),
-        )
+            Models.WeatherPreviewItem(
+                19,
+                day = R.string.txt_tomorrow,
+                weather = SUNNY,
+                humidity = 6,
+                wind = 9
+            ),
+            Models.WeatherPreviewItem(
+                19,
+                day = R.string.txt_wednesday,
+                weather = OVERCAST,
+                humidity = 19,
+                wind = 19
+            ),
+            Models.WeatherPreviewItem(
+                23,
+                day = R.string.txt_thursday,
+                weather = RAINY,
+                humidity = 20,
+                wind = 7
+            ),
+            Models.WeatherPreviewItem(
+                25,
+                day = R.string.txt_friday,
+                weather = OVERCAST,
+                humidity = 9,
+                wind = 22
+            ),
+            Models.WeatherPreviewItem(
+                27,
+                day = R.string.txt_saturday,
+                weather = SUNNY,
+                humidity = 19,
+                wind = 9
+            ),
+        ),
+        humidity = 19,
+        wind = 29
     ),
     Models.CityItem(
         name = "Delhi",
@@ -204,12 +468,44 @@ val cityItems = listOf<Models.CityItem>(
         primaryWeatherEvent = WeatherEvent.Rain(level = 2),
         map = R.drawable.delhi_map,
         weatherPreviews = listOf(
-            Models.WeatherPreviewItem(27, day = R.string.txt_tomorrow, weather = RAINY),
-            Models.WeatherPreviewItem(26, day = R.string.txt_wednesday, weather = SUNNY),
-            Models.WeatherPreviewItem(30, day = R.string.txt_thursday, weather = RAINY),
-            Models.WeatherPreviewItem(25, day = R.string.txt_friday, weather = SUNNY),
-            Models.WeatherPreviewItem(23, day = R.string.txt_saturday, weather = SUNNY),
-        )
+            Models.WeatherPreviewItem(
+                27,
+                day = R.string.txt_tomorrow,
+                weather = RAINY,
+                humidity = 11,
+                wind = 9
+            ),
+            Models.WeatherPreviewItem(
+                26,
+                day = R.string.txt_wednesday,
+                weather = SUNNY,
+                humidity = 11,
+                wind = 19
+            ),
+            Models.WeatherPreviewItem(
+                30,
+                day = R.string.txt_thursday,
+                weather = RAINY,
+                humidity = 21,
+                wind = 19
+            ),
+            Models.WeatherPreviewItem(
+                25,
+                day = R.string.txt_friday,
+                weather = SUNNY,
+                humidity = 12,
+                wind = 7
+            ),
+            Models.WeatherPreviewItem(
+                23,
+                day = R.string.txt_saturday,
+                weather = SUNNY,
+                humidity = 16,
+                wind = 9
+            ),
+        ),
+        humidity = 19,
+        wind = 3
     ),
     Models.CityItem(
         name = "Rio De Janeiro",
@@ -219,12 +515,44 @@ val cityItems = listOf<Models.CityItem>(
         primaryWeatherEvent = WeatherEvent.Sun(level = 1),
         map = R.drawable.rdj_map,
         weatherPreviews = listOf(
-            Models.WeatherPreviewItem(33, day = R.string.txt_tomorrow, weather = OVERCAST),
-            Models.WeatherPreviewItem(34, day = R.string.txt_wednesday, weather = SUNNY),
-            Models.WeatherPreviewItem(30, day = R.string.txt_thursday, weather = RAINY),
-            Models.WeatherPreviewItem(22, day = R.string.txt_friday, weather = RAINY),
-            Models.WeatherPreviewItem(21, day = R.string.txt_saturday, weather = RAINY),
-        )
+            Models.WeatherPreviewItem(
+                33,
+                day = R.string.txt_tomorrow,
+                weather = OVERCAST,
+                humidity = 9,
+                wind = 11
+            ),
+            Models.WeatherPreviewItem(
+                34,
+                day = R.string.txt_wednesday,
+                weather = SUNNY,
+                humidity = 11,
+                wind = 9
+            ),
+            Models.WeatherPreviewItem(
+                30,
+                day = R.string.txt_thursday,
+                weather = RAINY,
+                humidity = 19,
+                wind = 11
+            ),
+            Models.WeatherPreviewItem(
+                22,
+                day = R.string.txt_friday,
+                weather = RAINY,
+                humidity = 19,
+                wind = 21
+            ),
+            Models.WeatherPreviewItem(
+                21,
+                day = R.string.txt_saturday,
+                weather = RAINY,
+                humidity = 11,
+                wind = 11
+            ),
+        ),
+        humidity = 22,
+        wind = 7
     ),
     Models.CityItem(
         name = "Abu Dhabi",
@@ -234,11 +562,43 @@ val cityItems = listOf<Models.CityItem>(
         primaryWeatherEvent = WeatherEvent.Sun(level = 3),
         map = R.drawable.abu_dhabi_map,
         weatherPreviews = listOf(
-            Models.WeatherPreviewItem(40, day = R.string.txt_tomorrow, weather = OVERCAST),
-            Models.WeatherPreviewItem(39, day = R.string.txt_wednesday, weather = OVERCAST),
-            Models.WeatherPreviewItem(39, day = R.string.txt_thursday, weather = SUNNY),
-            Models.WeatherPreviewItem(40, day = R.string.txt_friday, weather = SUNNY),
-            Models.WeatherPreviewItem(41, day = R.string.txt_saturday, weather = SUNNY),
-        )
+            Models.WeatherPreviewItem(
+                40,
+                day = R.string.txt_tomorrow,
+                weather = OVERCAST,
+                humidity = 2,
+                wind = 1
+            ),
+            Models.WeatherPreviewItem(
+                39,
+                day = R.string.txt_wednesday,
+                weather = OVERCAST,
+                humidity = 2,
+                wind = 3
+            ),
+            Models.WeatherPreviewItem(
+                39,
+                day = R.string.txt_thursday,
+                weather = SUNNY,
+                humidity = 1,
+                wind = 9
+            ),
+            Models.WeatherPreviewItem(
+                40,
+                day = R.string.txt_friday,
+                weather = SUNNY,
+                humidity = 1,
+                wind = 1
+            ),
+            Models.WeatherPreviewItem(
+                41,
+                day = R.string.txt_saturday,
+                weather = SUNNY,
+                humidity = 0,
+                wind = 1
+            ),
+        ),
+        humidity = 1,
+        wind = 11
     )
 )
