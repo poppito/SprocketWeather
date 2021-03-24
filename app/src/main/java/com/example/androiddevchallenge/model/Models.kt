@@ -31,7 +31,8 @@ class Models {
         val map: Int,
         val weatherPreviews: List<WeatherPreviewItem>,
         val humidity: Int,
-        val wind: Int
+        val wind: Int,
+        val radar: Int
     )
 
     data class WeatherPreviewItem(
@@ -95,7 +96,8 @@ val cityItems = listOf<Models.CityItem>(
             ),
         ),
         humidity = 20,
-        wind = 19
+        wind = 19,
+        radar = R.drawable.wind_1
     ),
     Models.CityItem(
         name = "New York",
@@ -130,7 +132,8 @@ val cityItems = listOf<Models.CityItem>(
             ),
         ),
         humidity = 10,
-        wind = 13
+        wind = 13,
+        radar = R.drawable.wind_2
     ),
     Models.CityItem(
         name = "Tokyo",
@@ -162,7 +165,8 @@ val cityItems = listOf<Models.CityItem>(
             ),
         ),
         humidity = 10,
-        wind = 15
+        wind = 15,
+        radar = R.drawable.wind_5
     ),
     Models.CityItem(
         name = "Barcelona",
@@ -196,7 +200,8 @@ val cityItems = listOf<Models.CityItem>(
             ),
         ),
         humidity = 1,
-        wind = 10
+        wind = 10,
+        radar = R.drawable.wind_3
     ),
     Models.CityItem(
         name = "Berlin",
@@ -231,7 +236,8 @@ val cityItems = listOf<Models.CityItem>(
             ),
         ),
         humidity = 6,
-        wind = 11
+        wind = 11,
+        radar = R.drawable.wind_2
     ),
     Models.CityItem(
         name = "London",
@@ -270,7 +276,8 @@ val cityItems = listOf<Models.CityItem>(
             ),
         ),
         humidity = 11,
-        wind = 17
+        wind = 17,
+        radar = R.drawable.wind_4
     ),
     Models.CityItem(
         name = "Hong Kong",
@@ -317,7 +324,8 @@ val cityItems = listOf<Models.CityItem>(
             ),
         ),
         humidity = 11,
-        wind = 20
+        wind = 20,
+        radar = R.drawable.wind_5
     ),
     Models.CityItem(
         name = "Athens",
@@ -364,7 +372,8 @@ val cityItems = listOf<Models.CityItem>(
             ),
         ),
         humidity = 4,
-        wind = 1
+        wind = 1,
+        radar = R.drawable.wind_5
     ),
     Models.CityItem(
         name = "Vienna",
@@ -411,7 +420,8 @@ val cityItems = listOf<Models.CityItem>(
             ),
         ),
         humidity = 13,
-        wind = 11
+        wind = 11,
+        radar = R.drawable.wind_1
     ),
     Models.CityItem(
         name = "Paris",
@@ -458,7 +468,8 @@ val cityItems = listOf<Models.CityItem>(
             ),
         ),
         humidity = 19,
-        wind = 29
+        wind = 29,
+        radar = R.drawable.wind_3
     ),
     Models.CityItem(
         name = "Delhi",
@@ -505,7 +516,8 @@ val cityItems = listOf<Models.CityItem>(
             ),
         ),
         humidity = 19,
-        wind = 3
+        wind = 3,
+        radar = R.drawable.wind_1
     ),
     Models.CityItem(
         name = "Rio De Janeiro",
@@ -552,7 +564,8 @@ val cityItems = listOf<Models.CityItem>(
             ),
         ),
         humidity = 22,
-        wind = 7
+        wind = 7,
+        radar = R.drawable.wind_5
     ),
     Models.CityItem(
         name = "Abu Dhabi",
@@ -599,6 +612,7 @@ val cityItems = listOf<Models.CityItem>(
             ),
         ),
         humidity = 1,
-        wind = 11
+        wind = 11,
+        radar = R.drawable.wind_1
     )
 )

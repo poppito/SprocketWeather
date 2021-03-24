@@ -25,7 +25,6 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -56,9 +55,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -77,7 +74,6 @@ import com.example.androiddevchallenge.ui.theme.darkTransparent
 import com.example.androiddevchallenge.ui.theme.headerFont
 import com.example.androiddevchallenge.ui.theme.italicFont
 import com.example.androiddevchallenge.ui.theme.lightTransparent
-import com.example.androiddevchallenge.ui.theme.windColor
 import extensions.capitalCase
 import extensions.getForecastFromWeatherEvents
 import extensions.toFahrenheit
@@ -292,24 +288,25 @@ private fun ShowOvercast() {
 
 @Composable
 private fun Radar(data: Models.CityItem) {
-    var fullWidth = 0f
-    var fullHeight = 0f
-    val padding = 4.dp.value
+    // generate random translationX
 
+    val offsetX = (0..10).random()
+
+    // rotate fully then restart
     val rotateTransition = rememberInfiniteTransition()
     val rotation = rotateTransition.animateFloat(
         initialValue = 0f, targetValue = 360f,
         animationSpec = infiniteRepeatable(
             animation = tween(3000, easing = FastOutLinearInEasing),
-            repeatMode = RepeatMode.Reverse
+            repeatMode = RepeatMode.Restart
         )
     )
 
-    val offsetTransition = rememberInfiniteTransition()
-    val offset = offsetTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = fullHeight,
-        animationSpec = infiniteRepeatable(
+    val offset = rememberInfiniteTransition()
+    val offsetting = offset.animateFloat(
+        initialValue = 0f, targetValue = offsetX.toFloat(),
+        animationSpec =
+        infiniteRepeatable(
             animation = tween(3000, easing = FastOutLinearInEasing),
             repeatMode = RepeatMode.Restart
         )
@@ -328,21 +325,22 @@ private fun Radar(data: Models.CityItem) {
                 modifier = Modifier.fillMaxSize()
             )
             Image(
-                painterResource(id = if (isSystemInDarkTheme()) R.drawable.bg_dark_36 else R.drawable.ic_bg_light_36),
+                painterResource(id = if (isSystemInDarkTheme()) R.drawable.ic_bg_light_36 else R.drawable.bg_dark_36),
                 contentDescription = stringResource(id = R.string.cd_map),
                 modifier = Modifier.fillMaxSize()
             )
-            Canvas(modifier = Modifier.fillMaxSize()) {
-                fullWidth = size.width
-                fullHeight = size.height
-                drawLine(
-                    color = windColor,
-                    strokeWidth = 4.dp.value,
-                    start = Offset(x = 8.dp.value, y = 8.dp.value),
-                    end = Offset(x = offset.value, y = offset.value),
-                    pathEffect = PathEffect.cornerPathEffect(radius = 8.dp.value)
+            Image(
+                painterResource(id = data.radar),
+                modifier = Modifier
+                    .size(140.dp)
+                    .offset(x = 140.dp, y = 50.dp)
+                    .padding(start = offsetting.value.dp, end = offsetting.value.dp)
+                    .rotate(rotation.value),
+                contentDescription = stringResource(id = R.string.cd_wind),
+                colorFilter = ColorFilter.tint(
+                    color = MaterialTheme.colors.background
                 )
-            }
+            )
         }
     }
 }
